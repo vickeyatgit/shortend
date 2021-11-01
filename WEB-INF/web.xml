@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>shortend</display-name>
+  <welcome-file-list>
+    <!-- <welcome-file>index.html</welcome-file> -->
+    <!-- <welcome-file>index.htm</welcome-file> -->
+    <welcome-file>login.jsp</welcome-file>
+    <!-- <welcome-file>default.html</welcome-file> -->
+    <!-- <welcome-file>default.htm</welcome-file> -->
+    <!-- <welcome-file>default.jsp</welcome-file> -->
+  </welcome-file-list>
+  
+  <servlet>
+    <description></description>
+    <display-name>Adminlogin</display-name>
+    <servlet-name>Adminlogin</servlet-name>
+    <servlet-class>Adminlogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Adminlogin</servlet-name>
+    <url-pattern>/Adminlogin</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>Createadmin</display-name>
+    <servlet-name>Createadmin</servlet-name>
+    <servlet-class>Createadmin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Createadmin</servlet-name>
+    <url-pattern>/Createadmin</url-pattern>
+  </servlet-mapping>
+
+  
+  <servlet>
+    <description></description>
+    <display-name>AdminLibInsert</display-name>
+    <servlet-name>AdminLibInsert</servlet-name>
+    <servlet-class>AdminLibInsert</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminLibInsert</servlet-name>
+    <url-pattern>/AdminLibInsert</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>AdminLibDelete</display-name>
+    <servlet-name>AdminLibDelete</servlet-name>
+    <servlet-class>AdminLibDelete</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminLibDelete</servlet-name>
+    <url-pattern>/AdminLibDelete</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>AdminLogout</display-name>
+    <servlet-name>AdminLogout</servlet-name>
+    <servlet-class>AdminLogout</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminLogout</servlet-name>
+    <url-pattern>/AdminLogout</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LibrarianLogin</display-name>
+    <servlet-name>LibrarianLogin</servlet-name>
+    <servlet-class>LibrarianLogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibrarianLogin</servlet-name>
+    <url-pattern>/LibrarianLogin</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LibBookInsert</display-name>
+    <servlet-name>LibBookInsert</servlet-name>
+    <servlet-class>LibBookInsert</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibBookInsert</servlet-name>
+    <url-pattern>/LibBookInsert</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LibraryBook</display-name>
+    <servlet-name>LibraryBook</servlet-name>
+    <servlet-class>LibraryBook</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibraryBook</servlet-name>
+    <url-pattern>/LibraryBook</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>LibrarianLogout</display-name>
+    <servlet-name>LibrarianLogout</servlet-name>
+    <servlet-class>LibrarianLogout</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibrarianLogout</servlet-name>
+    <url-pattern>/LibrarianLogout</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <description></description>
+    <display-name>CheckReader</display-name>
+    <servlet-name>CheckReader</servlet-name>
+    <servlet-class>CheckReader</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckReader</servlet-name>
+    <url-pattern>/CheckReader</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>AddReader</display-name>
+    <servlet-name>AddReader</servlet-name>
+    <servlet-class>AddReader</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddReader</servlet-name>
+    <url-pattern>/AddReader</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <description></description>
+    <display-name>LibrarianLendBook</display-name>
+    <servlet-name>LibrarianLendBook</servlet-name>
+    <servlet-class>LibrarianLendBook</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibrarianLendBook</servlet-name>
+    <url-pattern>/LibrarianLendBook</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>RemoveBooks</display-name>
+    <servlet-name>RemoveBooks</servlet-name>
+    <servlet-class>RemoveBooks</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoveBooks</servlet-name>
+    <url-pattern>/RemoveBooks</url-pattern>
+  </servlet-mapping>
+
+
+
+  <servlet>
+    <description></description>
+    <display-name>FilterBooks</display-name>
+    <servlet-name>FilterBooks</servlet-name>
+    <servlet-class>FilterBooks</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FilterBooks</servlet-name>
+    <url-pattern>/FilterBooks</url-pattern>
+  </servlet-mapping>
+
+  
+
+  <servlet>
+    <description></description>
+    <display-name>ReadersData</display-name>
+    <servlet-name>ReadersData</servlet-name>
+    <servlet-class>ReadersData</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReadersData</servlet-name>
+    <url-pattern>/ReadersData</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <description></description>
+    <display-name>Dashboard</display-name>
+    <servlet-name>Dashboard</servlet-name>
+    <servlet-class>Dashboard</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Dashboard</servlet-name>
+    <url-pattern>/Dashboard</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LendingData</display-name>
+    <servlet-name>LendingData</servlet-name>
+    <servlet-class>LendingData</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LendingData</servlet-name>
+    <url-pattern>/LendingData</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>GetLibrarianData</display-name>
+    <servlet-name>GetLibrarianData</servlet-name>
+    <servlet-class>GetLibrarianData</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetLibrarianData</servlet-name>
+    <url-pattern>/GetLibrarianData</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>Logout</display-name>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>Logout</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/Logout</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>myalltempchecks</display-name>
+    <servlet-name>myalltempchecks</servlet-name>
+    <servlet-class>myalltempchecks</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>myalltempchecks</servlet-name>
+    <url-pattern>/myalltempchecks</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>GetFileReq</display-name>
+    <servlet-name>GetFileReq</servlet-name>
+    <servlet-class>GetFileReq</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetFileReq</servlet-name>
+    <url-pattern>/GetFileReq</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>GetFilePdf</display-name>
+    <servlet-name>GetFilePdf</servlet-name>
+    <servlet-class>GetFilePdf</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetFilePdf</servlet-name>
+    <url-pattern>/GetFilePdf</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>GetFilexls</display-name>
+    <servlet-name>GetFilexls</servlet-name>
+    <servlet-class>GetFilexls</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetFilexls</servlet-name>
+    <url-pattern>/GetFilexls</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>GetFileHtml</display-name>
+    <servlet-name>GetFileHtml</servlet-name>
+    <servlet-class>GetFileHtml</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetFileHtml</servlet-name>
+    <url-pattern>/GetFileHtml</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>SendMail</display-name>
+    <servlet-name>SendMail</servlet-name>
+    <servlet-class>SendMail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SendMail</servlet-name>
+    <url-pattern>/SendMail</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>StoreMail</display-name>
+    <servlet-name>StoreMail</servlet-name>
+    <servlet-class>StoreMail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StoreMail</servlet-name>
+    <url-pattern>/StoreMail</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>UserChecker</display-name>
+    <servlet-name>UserChecker</servlet-name>
+    <servlet-class>UserChecker</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserChecker</servlet-name>
+    <url-pattern>/UserChecker</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>AutoMail</display-name>
+    <servlet-name>AutoMail</servlet-name>
+    <servlet-class>AutoMail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AutoMail</servlet-name>
+    <url-pattern>/AutoMail</url-pattern>
+  </servlet-mapping>
+
+  <listener>
+    <listener-class>
+        AutoSendMail
+    </listener-class>
+  </listener>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>com.sun.mail</groupId>
+      <artifactId>javax.mail</artifactId>
+      <version>1.6.2</version>
+    </dependency>
+  </dependencies>
+
+  <dependency>
+    <groupId>javax.mail</groupId>
+    <artifactId>mail</artifactId>
+    <version>1.5.0-b01</version>
+  </dependency>
+
+  <dependency>
+    <groupId>com.itextpdf</groupId>
+    <artifactId>itextpdf</artifactId>
+    <version>5.5.9</version>
+</dependency>
+
+
+  <dependency>
+    <groupId>org.webjars</groupId>
+    <artifactId>jquery</artifactId>
+    <version>3.6.0</version>
+
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20200518</version>
+    </dependency>
+  </dependency>
+
+<filter>
+  <filter-name>CorsFilter</filter-name>
+  <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+  <init-param>
+    <param-name>cors.allowed.origins</param-name>
+    <!-- <param-value>*</param-value>  add allowed origins separated by comma eg: http://www.broadcom.net -->
+    <param-value>http://localhost:4200</param-value> <!--  add allowed origins separated by comma eg: http://www.broadcom.net -->
+  </init-param>
+  <init-param>
+    <param-name>cors.allowed.methods</param-name>
+    <param-value>GET,POST,HEAD,OPTIONS,PUT</param-value>
+  </init-param>
+  <init-param>
+    <param-name>cors.allowed.headers</param-name>
+    <param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers</param-value>
+  </init-param>
+  <init-param>
+    <param-name>cors.exposed.headers</param-name>
+    <param-value>Access-Control-Allow-Origin,Access-Control-Allow-Credentials</param-value>
+    <!-- <param-value>true</param-value> -->
+  </init-param>
+  </filter>
+<filter-mapping>
+  <filter-name>CorsFilter</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping>
+<!-- /cors -->
+
+
+</web-app>
