@@ -34,19 +34,7 @@ public class LendingData extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-                // Dbclass db = new Dbclass();
                 PrintWriter out = response.getWriter();
-                // JSONArray hi = new JSONArray();
-                // System.out.println("getting in");
-                // try {
-                //     System.out.println("try");
-                //     hi = db.readersData();
-                //     // out.println(hi);
-                // } catch (Exception e) {
-                //     e.printStackTrace();
-                // }
-                // System.out.println("finished");
                 out.println("finished");
                 out.flush();
 

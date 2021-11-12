@@ -28,7 +28,6 @@ public class GetFileReq extends HttpServlet {
                 JSONArray hi = new JSONArray();
                 hi = db.readersData();
                 String data = "a,b,c,d";
-                // String[] data = {"Ani", "Sam", " Joe"}; 
                 String newData="S_NO,Username,First Name,Last Name,Email Id,Mobile Number\n";
                 ArrayList<ArrayList<String>> graph = new ArrayList<>();
                 graph = db.librarianGetList();
@@ -41,10 +40,6 @@ public class GetFileReq extends HttpServlet {
                     newData += graph.get(count).get(4)+",\n";
                     
                 }
-                // for (int i=0; i < hi.length(); i++) {
-                //     JSONObject jo = new JSONObject();
-                //     try{
-                //         jo = hi.getJSONObject(i);
 
                 System.out.println(newData);
                 response.setContentType("text/csv");

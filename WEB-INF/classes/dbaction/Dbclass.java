@@ -1,9 +1,6 @@
 package dbaction;
 
 import java.sql.Array;
-
-//import template.Librarianlist;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -15,16 +12,8 @@ import org.json.*;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.Base64; 
-// import java.lang.*;
-// import java.sql.
-
-
-
 import java.util.ArrayList;
-// import template.Librarianlist;
 
-
-// import org.graalvm.compiler.hotspot.nodes.StubStartNode;
 
 public class Dbclass {
     String url = "jdbc:postgresql://localhost:5432/lib_management", userName = "postgres", password = "hello123";
@@ -359,6 +348,7 @@ public class Dbclass {
         }
     }
 
+    //list of books
     public JSONArray librarianBook() {
 
         ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
@@ -407,6 +397,7 @@ public class Dbclass {
     }
     
 
+    //check reader availability
     public Boolean ReadersCheck(String userName) {
         Boolean check = false;
         String sql = "SELECT * FROM reader where username='" + userName + "'";
@@ -423,6 +414,7 @@ public class Dbclass {
         return check;
     }
 
+    //add reader
     public Boolean addReader(String username,String name) {
         Boolean check = false;
         String sql = "INSERT INTO reader (username,name) VALUES('"+username+"','"+name+"')";
@@ -442,6 +434,7 @@ public class Dbclass {
         return check;
     }
 
+    //delete books
     public String RemoveBooks(String bookId, String bookCount) {
         String check = "Try Again SomeTime";
         try {
@@ -497,6 +490,7 @@ public class Dbclass {
         return check;
     }
 
+    //give book to reader
     public String lendBook(String bookId, String username) {
         String check = "Try Again SomeTime";
         try {
@@ -532,6 +526,7 @@ public class Dbclass {
         return check;
     }
 
+    //filter books
     public JSONArray filterBooks(String title,String lang,String auth,String cat ,String avail) {
         ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
         JSONArray ja = new JSONArray();
@@ -607,6 +602,7 @@ public class Dbclass {
         return ja;
     }
 
+    //readers lend books
     public JSONArray readersData() {
         JSONArray ja = new JSONArray();
         try {
@@ -620,7 +616,6 @@ public class Dbclass {
             //get leaders Data
             ResultSet result = state.executeQuery(bookLend);
             while (result.next()) {
-                // JSONObject jo = new JSONObject();
                 ArrayList<Integer> temp = new ArrayList<Integer>();
                 temp.add(result.getInt("readerid"));
                 temp.add(result.getInt("bookid"));
@@ -662,8 +657,6 @@ public class Dbclass {
             //arranging data
             for (int j = 0; j < lendingDate.size(); j++) {
                 JSONObject jo = new JSONObject();
-                // lendingDate.get(j).get(0);//readers id
-                // lendingDate.get(j).get(1);//book id
                 jo.put("id", j+1);
                 jo.put("readerid", lendingDate.get(j).get(0));
                 System.out.println(readersDetails.get(lendingDate.get(j).get(0)));
@@ -681,6 +674,7 @@ public class Dbclass {
         return ja;
     }
 
+    //pic chart
     public String getDashChart() {
         String res = "";
         try {
@@ -696,14 +690,14 @@ public class Dbclass {
             if (rs.next() != false) {
                 res += String.valueOf(rs.getInt("count"));
             }
-    // "SELECT COUNT(*) FROM reader"//no of reader
-    // "SELECT COUNT(*) FROM librarian ;"//no of Librarian
+    
         } catch (Exception e) {
             e.printStackTrace();
         }
         return res;
     }
 
+    //add mail items to mail
     public Boolean mail(String from,String to,String sub,String body,String time){
         Boolean check = false;
         String query = "INSERT INTO mails (emailfrom,emailto,subject,body,time) VALUES (?,?,?,?,?);";
@@ -731,6 +725,7 @@ public class Dbclass {
         return check;
     }
 
+    //login into session
     public Boolean sessionReg(String pcId,String sessionId,String username,String role ){
         Boolean check = false;
         String query = "INSERT INTO sessionlogin (username,role,pcid,sessionid) VALUES (?,?,?,?);";
@@ -753,6 +748,7 @@ public class Dbclass {
         return check;
     }
 
+    //session is active or not
     public String sessionChecker(String token,String pcid){
         String query = "SELECT id,role FROM sessionlogin WHERE sessionid='"+token+"' AND pcid='"+pcid+"';";
         String carry = "error";
@@ -764,6 +760,7 @@ public class Dbclass {
                 carry = result.getString("role");
             }
             System.out.println("carry => "+carry);
+            Boolean sessionRemover = removeUserFromSession();
         }catch (Exception e) {
             e.printStackTrace();
             
@@ -771,6 +768,7 @@ public class Dbclass {
         return carry;
     }
 
+    //session logout
     public Boolean sessionLogout(String token,String pcid){
         Boolean suc = false;
         String query = "DELETE FROM sessionlogin WHERE sessionid=? AND pcid=? ;";
@@ -788,6 +786,7 @@ public class Dbclass {
         return suc;
     }
 
+    //return role of user
     public String roleChecker(String pcid,String rawCookie){
         // String roleOut = "erroe";
         //get cookied
@@ -810,6 +809,7 @@ public class Dbclass {
         return getResult;
     }
 
+    //get username by token and pc id in ency format
     public String getUserName(String pcid,String rawCookie){
         String token = "";
         String[] rawCookieParams = rawCookie.split(";");
@@ -830,6 +830,7 @@ public class Dbclass {
         return getResult;
     }
     
+    //get name from session
     public String getNameFromSession(String token,String pcid){
         String query = "SELECT id,username FROM sessionlogin WHERE sessionid='"+token+"' AND pcid='"+pcid+"';";
         String carry = "error";
@@ -847,6 +848,7 @@ public class Dbclass {
         return carry;
     }
 
+    //get user password
     public  String GetUserPassword(String username){
         String query = "SELECT password FROM admin WHERE username='"+username+"';";
         String carry = "";
@@ -862,6 +864,47 @@ public class Dbclass {
             e.printStackTrace();
         }
         return carry;
+    }
+
+    //remove user from session
+    public Boolean removeUserFromSession(){
+        Boolean suc = false;
+        String query = " DELETE FROM sessionlogin WHERE date < (NOW() - INTERVAL '60' MINUTE) ;";
+        try {  
+            Connection con = getConnection();
+            PreparedStatement pstmt = con.prepareStatement(query);
+            // pstmt.setString(1, username);
+
+            int affectedrows = pstmt.executeUpdate();
+            if(affectedrows>0) suc=true;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return suc;
+    }
+
+    //send mail automatic in regular interval
+    public Boolean storeMailInterval(String from,String to,String subject,String body,String fileType,String fileName,String type,String minutes,String onDate){
+        Boolean suc = false;
+        // String query = "INSERT INTO sendmail (mailfrom,mailto,subject,body,attachment,type,intervalminutes,ondate) VALUES (?,?,?,?,?,?,?,?);";
+        // try {  
+        //     Connection con = getConnection();
+        //     PreparedStatement pstmt = con.prepareStatement(query);
+        //     pstmt.setString(1, from);
+        //     pstmt.setString(2, to);
+        //     pstmt.setString(3, subject);
+        //     pstmt.setString(4, body);
+        //     pstmt.setString(5, fileType);
+        //     pstmt.setString(6, type);
+        //     pstmt.setString(7, minutes);
+        //     pstmt.setString(7, onDate);
+
+        //     int affectedrows = pstmt.executeUpdate();
+        //     if(affectedrows>0) suc=true;
+        // }catch (Exception e) {
+        //     e.printStackTrace();
+        // }
+        return suc;
     }
 
 

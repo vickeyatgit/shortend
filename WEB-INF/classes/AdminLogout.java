@@ -23,13 +23,6 @@ public class AdminLogout extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HttpSession session = request.getSession();
-        session.removeAttribute("username");
-        session.removeAttribute("ckecklist");
-        session.invalidate();
-        //  request.getSession().invalidate();
-        PrintWriter out = response.getWriter();
-        out.println("out");
-		out.flush();
+        
     }
 }

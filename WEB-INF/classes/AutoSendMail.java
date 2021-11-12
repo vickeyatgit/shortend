@@ -42,7 +42,6 @@ public class AutoSendMail implements ServletContextListener {
     }
     @Override
     public void run() {
-        // Do your hourly job here.
         System.out.println("Job trigged by scheduler "+i);
     }
 }

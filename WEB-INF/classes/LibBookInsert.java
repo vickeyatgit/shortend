@@ -52,11 +52,7 @@ public class LibBookInsert extends HttpServlet {
                     }catch(Exception e){
                         e.printStackTrace();
                     }
-                    // out.println("s");
-                    // out.flush();
                 }else{
-                    // out.println("f");
-                    // out.flush();
                     try{
                         resSent.put("result","Please, logout and try again");
                     }catch(Exception e){

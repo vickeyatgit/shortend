@@ -16,11 +16,8 @@ public class myalltempchecks extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-            	// Dbclass db = new Dbclass();
-            	PrintWriter out = response.getWriter();
-        		// JSONArray hi = new JSONArray();
-        		//  hi = db.readersData();
-            	// out.println(hi);
+            PrintWriter out = response.getWriter();
+
                 HttpServletRequest newRequest = (HttpServletRequest) request;
                 System.out.println("\n\nParameters");
 
@@ -35,9 +32,8 @@ public class myalltempchecks extends HttpServlet {
              String username, password;
         username = request.getParameter("username");
         System.out.println("username => "+ username);
-        // password = request.getParameter("password");
         Boolean check = true;
-        // check = db.login(username, password);
+
         JSONObject nowSent = new JSONObject();
             try {
 
@@ -54,9 +50,7 @@ public class myalltempchecks extends HttpServlet {
         Dbclass db = new Dbclass();
         PrintWriter out = response.getWriter();
         HttpServletRequest newRequest = (HttpServletRequest) request;
-        // System.out.println("payload: " + newRequest.getRequestBody());
         System.out.println("payload: " + newRequest);
-        // System.out.println(requestWrapper.getRequestBody());
 
 
         // Enumeration headerNames = newRequest.getHeaderNames();
@@ -74,19 +68,11 @@ public class myalltempchecks extends HttpServlet {
         }
 
         System.out.println("\n\n Row data");
-        // System.out.println(extractPostRequestBody(httpRequest));
-
-
-
-
-
-
+        
         String username, password;
         username = request.getParameter("username");
         System.out.println("username => "+ username);
-        // password = request.getParameter("password");
         Boolean check = true;
-        // check = db.login(username, password);
         JSONObject nowSent = new JSONObject();
             try {
 

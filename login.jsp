@@ -94,7 +94,7 @@ div.buttom{
 <div class="container">
         <h1 class="title">Library Management System</h1>
         <%-- action="login.jsp" --%>
-        <form  method="POST">
+        <!-- <form  method="POST">
         <div class="card">
             <h1 style="text-align: center;font-family:verdana;">Login</h1>
             <h3 style="font-family:courier;">UserName</h3>
@@ -103,78 +103,136 @@ div.buttom{
             <input type="password" class="inp" id="password" name="password">
             <h5 id="res" style="text-align: center;color:red;"></h5>
             <div class="buttom">
-                <%-- formaction="Adminlogin"<button class="button" type="submit1" id="admin"  name="admin" formaction="login.jsp"><span>As Admin </span></button> --%>
-                <button id="adminpanel" class="button" type="button" onclick="login()"><span>As Admin </span></button>
+                <p>hello world ass</p>
+                <button id="adminpanel" class="button" onclick="login()"><span>Ass Admin </span></button>
                 <button class="button" type="button" onclick="liblogin()"><span>As Librarian </span></button>
             </div>
             <%-- <a href="http://localhost:8080/shortend/createAdmin.jsp" style="text-align:center;margin-top:30px;">Create Admin</a> --%>
             <a href="${pageContext.request.contextPath}/createAdmin.jsp" style="text-align:center;margin-top:30px;">Create Admin</a>
+            <a href="http://localhost:8080/shortend/ReadersData" style="text-align:center;margin-top:30px;">Create Admin</a>
         </div>
+        </form> -->
+        <!-- action="j_security_check" -->
+        <form method=post >
+          <div>
+            <span>Username:</span>
+            <br />
+            <input type="text" name="j_username" id="j_username">
+          </div>
+          <div>
+            <span>Password:</span>
+            <br />
+            <input type="password" name="j_password" id="j_password">
+          </div>
+          <!-- <input type="submit" value="Login"> -->
+          <p>hello world ass</p>
         </form>
         
     </div>
 </body>
 <script>
+  $(document).ready(function () {
+      $("p").click(function () {
+        // alert("The paragraph was clicked.");
+        console.log("hello");
+        var username = $('#j_username').val();
+        var password = $('#j_password').val();
+        console.log(username);
+        console.log(password);
+
+        $.ajax({
+          url: 'http://localhost:8080/shortend/j_security_check',
+          type: 'POST',
+          data: {
+            j_username:username,
+            j_password:password
+          },
+          timeout: 30000,
+          async: false,
+          success: function (data) {
+            console.log("////////////////////////")
+            console.log(data);
+            console.log("////////////////////////")
+            // if(data.status == "success"){
+            //   window.location.href = "http://localhost:8080/shortend/admin.jsp";
+            // }
+            // else{
+            //   $('#res').text("Invalid Username or Password");
+            // }
+          },
+        });
+        })
+      });
   var msg = null;
 function login(){
+  
+  console.log("login");
   var username = $('#username').val();
   var password = $('#password').val();
-  if(username!=null && password != null){
-  $.ajax({
-    type:'POST',
-    url:'Adminlogin',
-    data:{
-        username:username,
-        password:password
-      },
-    success:function(result){
-      var msg=result[0];
-      console.log(result);
-      if(msg=="s"){
-        // window.alert("suc now go on");
-        window.location.replace('adminPanel.jsp')
-        // window.alert(location.hostname);
-      }
-      if(msg=="f"){
-        window.alert("please check username and password");
-        $('#res').html("please check username and password");
-      }
-      // else{
-      //   $('#res').html("something went wrong");
-      // }
-    }
-  });
-  }
+  window.location.replace('www.google.com')
+  // console.log(username);
+  // console.log("hello");
+  // if(username!=null && password != null){
+  // $.ajax({
+  //   type:'POST',
+  //   url:'Adminlogin',
+  //   xhrFields: {
+  //     withCredentials: true,
+  //   },
+  //   data:{
+  //       username:username,
+  //       password:password
+  //     },
+  //   success:function(result){
+  //     console.log("hello");
+  //     console.log(result);
+  //     // var msg=result[0];
+  //     // console.log(result);
+  //     // if(msg=="s"){
+  //       // window.alert("suc now go on");
+  //       // window.location.replace('ReadersData')
+  //       // window.alert(location.hostname);
+  //     // }
+  //     // if(msg=="f"){
+  //     //   window.alert("please check username and password");
+  //     //   $('#res').html("please check username and password");
+  //     // }
+  //     // else{
+  //     //   $('#res').html("something went wrong");
+  //     // }
+  //   }
+  // });
+  // }
 }
 
 function liblogin(){
   var username = $('#username').val();
   var password = $('#password').val();
-if(username!=null && password != null){
-  $.ajax({
-    type:'POST',
-    url:'LibrarianLogin',
-    data:{
-        username:username,
-        password:password
-      },
-    success:function(result){
-      var msg=result[0];
-      console.log(result);
-      if(msg=="s"){
-        window.location.replace('librarianPanel.jsp')
-        // window.alert(location.hostname);
-      }
-      if(msg=="f"){
-        window.alert("please check username and password");
-        $('#res').html("please check username and password");
-      }
-      // else{
-      //   $('#res').html("something went wrong");
-      // }
-    }
-  });
-  }
+// if(username!=null && password != null){
+//   $.ajax({
+//     type:'POST',
+//     url:'LibrarianLogin',
+//     data:{
+//         username:username,
+//         password:password
+//       },
+//     success:function(result){
+//       var msg=result[0];
+//       console.log(result);
+//       if(msg=="s"){
+//         window.location.replace('librarianPanel.jsp')
+//         // window.alert(location.hostname);
+//       }
+//       if(msg=="f"){
+//         window.alert("please check username and password");
+//         $('#res').html("please check username and password");
+//       }
+//       // else{
+//       //   $('#res').html("something went wrong");
+//       // }
+//     }
+//   });
+//   }
 }
 
 

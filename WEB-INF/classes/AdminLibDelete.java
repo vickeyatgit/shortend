@@ -69,33 +69,6 @@ public class AdminLibDelete extends HttpServlet {
                 e.printStackTrace();
             }
         }
-            // Boolean check = db.deleteLib(userName);
-            // if (check) {
-            //     try{
-            //         resSent.put("result","pass");
-            //     }
-            //     catch(Exception e){
-            //         e.printStackTrace();
-            //     }
-            // }
-            // else {
-            //     try{
-            //         resSent.put("result","fail");
-            //     }
-            //     catch(Exception e){
-            //         e.printStackTrace();
-            //     }
-                
-            // }
-        // }
-        // else{
-        //     try{
-        //             resSent.put("result","error");
-        //         }
-        //         catch(Exception e){
-        //             e.printStackTrace();
-        //         }
-        // }
         out.println(resSent);
         
     }

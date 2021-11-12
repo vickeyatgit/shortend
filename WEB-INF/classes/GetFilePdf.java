@@ -60,19 +60,7 @@ public class GetFilePdf extends HttpServlet {
                     PdfWriter.getInstance(document, response.getOutputStream());
 
                     document.open();
-
-//                     float[] columnWidths = {1.5f, 2f, 5f, 2f};
-//                     PdfPTable table = new PdfPTable(columnWidths);
-//                     table.setWidthPercentage(90f);
-//                     insertCell(table, "Order No", Element.ALIGN_RIGHT, 1);
-//    insertCell(table, "Account No", Element.ALIGN_LEFT, 1);
-//    insertCell(table, "Account Name", Element.ALIGN_LEFT, 1);
-//    insertCell(table, "Order Total", Element.ALIGN_RIGHT, 1);
-//    table.setHeaderRows(1);
                     PdfPTable table = new PdfPTable(6);
-                    // addTableHeader(table);
-                    // addRows(table);
-                    // addCustomRows(table);
                     ArrayList<ArrayList<String>> graph = new ArrayList<>();
                     graph = db.librarianGetList();
 

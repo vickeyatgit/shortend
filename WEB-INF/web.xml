@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
-  <display-name>shortend</display-name>
+
+  <!-- welcome add -->
   <welcome-file-list>
-    <!-- <welcome-file>index.html</welcome-file> -->
-    <!-- <welcome-file>index.htm</welcome-file> -->
     <welcome-file>login.jsp</welcome-file>
-    <!-- <welcome-file>default.html</welcome-file> -->
-    <!-- <welcome-file>default.htm</welcome-file> -->
-    <!-- <welcome-file>default.jsp</welcome-file> -->
   </welcome-file-list>
-  
+
+  <!-- class dir -->
   <servlet>
     <description></description>
     <display-name>Adminlogin</display-name>
@@ -32,7 +29,6 @@
     <url-pattern>/Createadmin</url-pattern>
   </servlet-mapping>
 
-  
   <servlet>
     <description></description>
     <display-name>AdminLibInsert</display-name>
@@ -110,7 +106,6 @@
     <url-pattern>/LibrarianLogout</url-pattern>
   </servlet-mapping>
 
-
   <servlet>
     <description></description>
     <display-name>CheckReader</display-name>
@@ -132,7 +127,6 @@
     <servlet-name>AddReader</servlet-name>
     <url-pattern>/AddReader</url-pattern>
   </servlet-mapping>
-
 
   <servlet>
     <description></description>
@@ -156,8 +150,6 @@
     <url-pattern>/RemoveBooks</url-pattern>
   </servlet-mapping>
 
-
-
   <servlet>
     <description></description>
     <display-name>FilterBooks</display-name>
@@ -169,8 +161,6 @@
     <url-pattern>/FilterBooks</url-pattern>
   </servlet-mapping>
 
-  
-
   <servlet>
     <description></description>
     <display-name>ReadersData</display-name>
@@ -181,7 +171,6 @@
     <servlet-name>ReadersData</servlet-name>
     <url-pattern>/ReadersData</url-pattern>
   </servlet-mapping>
-
 
   <servlet>
     <description></description>
@@ -326,73 +315,78 @@
     <url-pattern>/AutoMail</url-pattern>
   </servlet-mapping>
 
-  <listener>
-    <listener-class>
-        AutoSendMail
-    </listener-class>
-  </listener>
-
-
-  <dependencies>
-    <dependency>
-      <groupId>com.sun.mail</groupId>
-      <artifactId>javax.mail</artifactId>
-      <version>1.6.2</version>
-    </dependency>
-  </dependencies>
-
-  <dependency>
-    <groupId>javax.mail</groupId>
-    <artifactId>mail</artifactId>
-    <version>1.5.0-b01</version>
-  </dependency>
-
-  <dependency>
-    <groupId>com.itextpdf</groupId>
-    <artifactId>itextpdf</artifactId>
-    <version>5.5.9</version>
-</dependency>
-
-
-  <dependency>
-    <groupId>org.webjars</groupId>
-    <artifactId>jquery</artifactId>
-    <version>3.6.0</version>
-
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20200518</version>
-    </dependency>
-  </dependency>
-
-<filter>
-  <filter-name>CorsFilter</filter-name>
-  <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
-  <init-param>
-    <param-name>cors.allowed.origins</param-name>
-    <!-- <param-value>*</param-value>  add allowed origins separated by comma eg: http://www.broadcom.net -->
-    <param-value>http://localhost:4200</param-value> <!--  add allowed origins separated by comma eg: http://www.broadcom.net -->
-  </init-param>
-  <init-param>
-    <param-name>cors.allowed.methods</param-name>
-    <param-value>GET,POST,HEAD,OPTIONS,PUT</param-value>
-  </init-param>
-  <init-param>
-    <param-name>cors.allowed.headers</param-name>
-    <param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers</param-value>
-  </init-param>
-  <init-param>
-    <param-name>cors.exposed.headers</param-name>
-    <param-value>Access-Control-Allow-Origin,Access-Control-Allow-Credentials</param-value>
-    <!-- <param-value>true</param-value> -->
-  </init-param>
+<!-- cors -->
+  <filter>
+    <filter-name>CorsFilter</filter-name>
+    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+    <init-param>
+      <param-name>cors.allowed.origins</param-name>
+      <param-value>http://localhost:4200</param-value> <!--  add allowed origins separated by comma eg: http://www.broadcom.net -->
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.methods</param-name>
+      <param-value>GET,POST,HEAD,OPTIONS,PUT</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.headers</param-name>
+      <param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.exposed.headers</param-name>
+      <param-value>Access-Control-Allow-Origin,Access-Control-Allow-Credentials</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.support.credentials</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.preflight.maxage</param-name>
+      <param-value>10</param-value>
+    </init-param>
   </filter>
-<filter-mapping>
-  <filter-name>CorsFilter</filter-name>
-  <url-pattern>/*</url-pattern>
-</filter-mapping>
+  <filter-mapping>
+    <filter-name>CorsFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 <!-- /cors -->
 
+<!--Defines Security Constraint -->
+  <security-constraint>
+      <display-name>JSP Demo Constraint</display-name>
+      <web-resource-collection>
+        <web-resource-name>ReadersData</web-resource-name>
+        <description/>
+        <url-pattern>/ReadersData</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+        <description/>
+        <role-name>admin</role-name>
+      </auth-constraint>
+  </security-constraint>
+
+<!--Defines Login Config -->
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>file</realm-name>
+        <form-login-config>
+            <form-login-page>/printLogin.jsp</form-login-page>
+            <!-- <form-login-page>/login.jsp</form-login-page> -->
+            <form-error-page>/error.jsp</form-error-page>
+        </form-login-config>
+    </login-config>
+
+
+<!--Defines Security Role -->
+    <security-role>
+        <description/>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>librarian</role-name>
+    </security-role>
+
+<!-- session time out -->
+<session-config> <session-timeout>100</session-timeout> </session-config>
 
 </web-app>

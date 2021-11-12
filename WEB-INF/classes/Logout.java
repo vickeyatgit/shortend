@@ -21,13 +21,6 @@ public class Logout extends HttpServlet {
 
         protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // HttpSession session = request.getSession();
-        // session.removeAttribute("username");
-        // session.removeAttribute("ckecklist");
-        // session.invalidate();
-        request.getSession().invalidate();
-        // request.logout();
         PrintWriter out = response.getWriter();
         out.println("out");
 		out.flush();

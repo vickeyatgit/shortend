@@ -21,7 +21,6 @@ import java.io.*;
 public class GetFileHtml extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                // Dbclass db = new Dbclass();
                 response.setContentType("text/plain");
                 response.setHeader("Content-Disposition", "attachment; filename=\"librariabView.html\"");
                 String newData="<table>\n\t<tr>\n\t\t<th>S_NO.</th>\n\t\t<th>Username</th>\n\t\t<th>First Name</th>\n\t\t<th>Last Name</th>\n\t\t<th>Email Id</th>\n\t\t<th>Mobile Number</th>\n\t</tr>";
