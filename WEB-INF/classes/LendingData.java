@@ -18,16 +18,7 @@ public class LendingData extends HttpServlet {
         JSONArray hi = new JSONArray();
         System.out.println("getting in");
         System.out.println("try");
-
-        String pcid = request.getParameter("pcid");
-        String rawCookie = request.getHeader("Cookie");
-
-        if(rawCookie.length() > 0){
-            String authRole = db.roleChecker(pcid,rawCookie);
-            if(authRole.equals("librarian")){
-                hi = db.readersData();
-            }
-        }
+        hi = db.readersData();
         out.println(hi);
         out.flush();
     }

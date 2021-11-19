@@ -18,22 +18,13 @@ public class RemoveBooks extends HttpServlet {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         String bookId =request.getParameter("bookid");
         String bookkCount = request.getParameter("bookcount");
-        String pcid = request.getParameter("pcid");
-        String rawCookie = request.getHeader("Cookie");
         PrintWriter out = response.getWriter();
         String check = "Try Again SomeTime";
-        if(rawCookie.length() > 0){
-            String authRole = db.roleChecker(pcid,rawCookie);
-            if(authRole.equals("librarian")){
-                try {
-                    check = db.RemoveBooks(bookId, bookkCount);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }else{
-                check = "Invalid Authorization";
-            }
-        }        
+        try {
+            check = db.RemoveBooks(bookId, bookkCount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         out.println(check);
 		out.flush();
     }

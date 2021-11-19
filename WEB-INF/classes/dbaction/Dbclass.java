@@ -13,6 +13,8 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.util.Base64; 
 import java.util.ArrayList;
+import java.sql.Timestamp;
+
 
 
 public class Dbclass {
@@ -698,25 +700,30 @@ public class Dbclass {
     }
 
     //add mail items to mail
-    public Boolean mail(String from,String to,String sub,String body,String time){
+    public Boolean mail(String from,String to,String sub,String body,String time,String attachment,String type,int minutes,String date){
         Boolean check = false;
-        String query = "INSERT INTO mails (emailfrom,emailto,subject,body,time) VALUES (?,?,?,?,?);";
+        String query = "INSERT INTO mails (mailfrom,mailto,subject,body,attachment,type,intervalminutes,ondate) VALUES (?,?,?,?,?,?,?,?);";
         Connection con = getConnection();
+        
         // public static final Calendar tzUTC = Calendar.getInstance(TimeZone.getTimeZone("UTC"));  
         // LocalDate localDate = LocalDate.now();
         try {
-            PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, from);
-            ps.setString(2, to);
-            ps.setString(3, sub);
-            ps.setString(4, body);
+            // PreparedStatement ps = con.prepareStatement(query);
+            // ps.setString(1, from);
+            // ps.setString(2, to);
+            // ps.setString(3, sub);
+            // ps.setString(4, body);
+            // ps.setString(5, attachment);
+            // ps.setString(6, type);
+            // ps.setInt(7, minutes);
+            // ps.setInt(8,"" );
             // ps.setTimestamp(5, java.sql.Date.valueOf(java.time.LocalDate.now()));
-            ps.setString(5, time);
-            int countInserted = ps.executeUpdate();
-            if (countInserted == 1) {
-                check = true;
-            }
-            System.out.println(check);
+            // ps.setString(5, time);
+            // int countInserted = ps.executeUpdate();
+            // if (countInserted == 1) {
+            //     check = true;
+            // }
+            // System.out.println(check);
             
         } catch (Exception e) {
             e.printStackTrace();

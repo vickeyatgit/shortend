@@ -14,9 +14,11 @@ public class ReadersData extends HttpServlet {
     throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         // response.setHeader("Access-Control-Allow-Origin", "*");
+        // String rawCookie = request.getHeader("Cookie");
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
         PrintWriter out = response.getWriter();
-        out.println("hello_world");
+        String user = request.getRemoteUser();
+        out.println(user);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

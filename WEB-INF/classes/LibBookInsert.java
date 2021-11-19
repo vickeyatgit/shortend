@@ -35,48 +35,19 @@ public class LibBookInsert extends HttpServlet {
         tmp = request.getParameter("genre");
         String[] genre = tmp.split("[,]", 0);
         System.out.println("inn servlet");
-
-        String pcid = request.getParameter("pcid");
-        String rawCookie = request.getHeader("Cookie");
-
         JSONObject resSent = new JSONObject();
-
-        if(rawCookie.length() > 0){
-            String authRole = db.roleChecker(pcid,rawCookie);
-            if(authRole.equals("librarian")){
-                Boolean get = db.addBook(title, subtitle, author, category, language, publish, edition, tot, genre);
-                System.out.print(get);
-                if(get){
-                    try{
-                        resSent.put("result","Successfully Book is Added");
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                }else{
-                    try{
-                        resSent.put("result","Please, logout and try again");
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-            else{
-                try{
-                        resSent.put("result","Invalid user role");
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-            }
-        }
-        else{
+        Boolean get = db.addBook(title, subtitle, author, category, language, publish, edition, tot, genre);
+        System.out.print(get);
+        if(get){
             try{
-                try{
-                    resSent.put("result","sorry, I cannot find your details from login");
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+                resSent.put("result","Successfully Book is Added");
+            }catch(Exception e){
+                e.printStackTrace();
             }
-            catch(Exception e){
+        }else{
+            try{
+                resSent.put("result","Please, logout and try again");
+            }catch(Exception e){
                 e.printStackTrace();
             }
         }

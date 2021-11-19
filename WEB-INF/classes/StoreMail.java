@@ -304,10 +304,194 @@ public class StoreMail extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
                 response.setHeader("Access-Control-Allow-Credentials", "true");
-                        PrintWriter out = response.getWriter();
-                        //1. get conformation 
-                        String pcid = request.getParameter("pcid");
-                        String rawCookie = request.getHeader("Cookie");
+                System.out.println("doPost");
+                PrintWriter out = response.getWriter();
+                JSONObject jo = new JSONObject(); //for send result
+                Boolean result = false;
+                String from = request.getRemoteUser();
+                System.out.println("from"+from);
+                String pass = db.GetUserPassword(from);
+                String to = request.getParameter("to");
+                String subject = request.getParameter("subject");
+                String body = request.getParameter("body");
+                String attachment = request.getParameter("attache");
+                Boolean attachCheck = Boolean.parseBoolean(request.getParameter("attachCheck"));
+                System.out.println("from"+from);
+                System.out.println("pass"+pass);
+
+                System.out.println("to"+to);
+                System.out.println("subject"+subject);
+                System.out.println("body"+body);
+                System.out.println("attachment"+attachment);
+                System.out.println("attachCheck"+attachCheck);
+
+                // init property
+                Properties prop = new Properties();
+                prop.put("mail.smtp.host", "smtp.gmail.com");
+                prop.put("mail.smtp.port", "587");
+                prop.put("mail.smtp.auth", "true");
+                prop.put("mail.smtp.starttls.enable", "true");
+                Session session = Session.getInstance(prop,
+                    new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(from, pass);
+                    }
+                });
+
+                String filename="";
+                if(attachCheck){
+                    ArrayList<ArrayList<String>> graph = new ArrayList<>();
+                    graph = db.librarianGetList();
+                    switch (attachment) {
+                        case "html":
+                            {
+                                String newData="<table>\n\t<tr>\n\t\t<th>S_NO.</th>\n\t\t<th>Username</th>\n\t\t<th>First Name</th>\n\t\t<th>Last Name</th>\n\t\t<th>Email Id</th>\n\t\t<th>Mobile Number</th>\n\t</tr>";
+                                for (int count = 0; count < graph.size(); count++) {
+                                    newData +="\n\t<tr>";
+                                    newData += "\n\t\t<td>"+String.valueOf((count+1))+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(0)+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(1)+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(2)+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(3)+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(4)+"</td>";
+                                    newData += "\n\t</tr>";
+                                }
+                                newData += "\n</table > ";
+                                try {
+                                    FileWriter myWriter = new FileWriter("librarian.html");
+                                    myWriter.write(newData);
+                                    myWriter.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                    filename = "librarian.html";
+                                } catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                        case "pdf":
+                            {
+                                try {
+                                    Document document = new Document();
+                                    OutputStream outputStream = new FileOutputStream(new File("librarian.pdf"));
+                                    PdfWriter.getInstance(document, outputStream);
+                                    document.open();
+                                    PdfPTable table = new PdfPTable(6);
+                                    Stream.of("S_NO","Username","First Name","Last Name","Email Id","Mobile Number")
+                                    .forEach(columnTitle -> {
+                                        PdfPCell header = new PdfPCell();
+                                        header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                                        header.setBorderWidth(2);
+                                        header.setPhrase(new Phrase(columnTitle));
+                                        table.addCell(header);
+                                    });
+                                    for (int count = 0; count < graph.size(); count++) {
+                                        table.addCell(String.valueOf((count+1)));
+                                        table.addCell(graph.get(count).get(0));
+                                        table.addCell(graph.get(count).get(1));
+                                        table.addCell(graph.get(count).get(2));
+                                        table.addCell(graph.get(count).get(3));
+                                        table.addCell(graph.get(count).get(4));                  
+                                    }
+                                    Paragraph paragraph = new Paragraph("Librarian Data");
+                                    document.add(paragraph);
+                                    document.add(table);
+                                    document.close();
+                                    outputStream.close();
+                                    System.out.println("Pdf created successfully.");
+                                    filename = "librarian.pdf";
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                        case "csv":
+                            {
+                                String newData="S_NO,Username,First Name,Last Name,Email Id,Mobile Number\n";
+                                for (int count = 0; count < graph.size(); count++) {
+                                    newData += String.valueOf((count+1))+",";
+                                    newData += graph.get(count).get(0)+",";
+                                    newData += graph.get(count).get(1)+",";
+                                    newData += graph.get(count).get(2)+",";
+                                    newData += graph.get(count).get(3)+",";
+                                    newData += graph.get(count).get(4)+",\n";
+                                }
+                                try (PrintWriter writer = new PrintWriter("librarian.csv")) {
+                                    writer.write(newData.toString());
+                                    System.out.println("done!");
+                                    writer.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                    filename = "librarian.csv";
+                                } catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                        case "xls":
+                            {
+                                String newData="<table>\n\t<tr>\n\t\t<th>S_NO.</th>\n\t\t<th>Username</th>\n\t\t<th>First Name</th>\n\t\t<th>Last Name</th>\n\t\t<th>Email Id</th>\n\t\t<th>Mobile Number</th>\n\t</tr>";
+                                for (int count = 0; count < graph.size(); count++) {
+                                    newData +="\n\t<tr>";
+                                    newData += "\n\t\t<td>"+String.valueOf((count+1))+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(0)+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(1)+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(2)+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(3)+"</td>";
+                                    newData += "\n\t\t<td>"+graph.get(count).get(4)+"</td>";
+                                    newData += "\n\t</tr>";
+                                }
+                                newData += "\n</table > ";
+                                try (PrintWriter writer = new PrintWriter("librarian.xls")) {
+                                    writer.write(newData.toString());
+                                    System.out.println("done!");
+                                    writer.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                    filename = "librarian.xls";
+                                } catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+                }
+                try {
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(from));
+                    message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(to));
+                    message.setSubject(subject);
+                    if(attachCheck){
+                        BodyPart messageBodyPart = new MimeBodyPart();
+                        messageBodyPart.setText(body);
+                        Multipart multipart = new MimeMultipart();
+                        multipart.addBodyPart(messageBodyPart);
+                        messageBodyPart = new MimeBodyPart();
+                        DataSource source = new FileDataSource(filename);
+                        messageBodyPart.setDataHandler(new DataHandler(source));
+                        messageBodyPart.setFileName(filename);
+                        multipart.addBodyPart(messageBodyPart);
+                        message.setContent(multipart);
+                    }else{
+                        message.setText(body);
+                    }
+                    System.out.println("taking in");
+                    Transport.send(message);
+                    System.out.println("Done");
+                    result=true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    jo.put("result",result);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            out.println(jo);
+            out.flush();
 
         }
 

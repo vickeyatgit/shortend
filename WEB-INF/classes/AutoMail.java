@@ -4,6 +4,7 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
 import dbaction.Dbclass;
+import org.json.JSONObject;
 
 public class AutoMail extends HttpServlet {
   Dbclass db = new Dbclass();
@@ -13,66 +14,53 @@ public class AutoMail extends HttpServlet {
       response.setHeader("Access-Control-Allow-Credentials", "true");
       System.out.println("AutoMail");
       PrintWriter out = response.getWriter();
-      //1. get conformation 
-      String pcid = request.getParameter("pcid");
-      String rawCookie = request.getHeader("Cookie");
-      Boolean roleChecker = false;
-      if(rawCookie.length() > 0){
-        String authRole = db.roleChecker(pcid,rawCookie);
-        roleChecker = authRole.equals("admin");
-      }
-      System.out.println("roleChecker: "+roleChecker);
-      String from="";
-      String userPassword="";
-      if(roleChecker){
-        String token = "";
-        String[] rawCookieParams = rawCookie.split(";");
-        for(String rawCookieNameAndValue :rawCookieParams)
-        {
-          String[] rawCookieNameAndValuePair = rawCookieNameAndValue.split("=");
-          String tempstring = new String(rawCookieNameAndValuePair[0]);
-          tempstring.trim();
-          if(tempstring.contains("token")){
-            String temp2 = new String(rawCookieNameAndValuePair[1]);
-            token = temp2;
-          }
-        }
-        byte[] actualByte = Base64.getDecoder().decode(token);
-        String actualToken = new String(actualByte);
-        from = db.getNameFromSession(actualToken,pcid);
-        String to = request.getParameter("to");
-        String subject = request.getParameter("subject");
-        String body = request.getParameter("body");
-        String attachment = request.getParameter("attache");
-        Boolean attachCheck = Boolean.parseBoolean(request.getParameter("attachCheck"));
-        String type = request.getParameter("type");
-        int interval = Integer.parseInt(request.getParameter("interval"));
-        String onDate = request.getParameter("onDate");
-        System.out.println(from);
-        System.out.println(to);
-        System.out.println(subject);
-        System.out.println(body);
-        System.out.println(attachment);
-        System.out.println(attachCheck);
-        System.out.println(type);
-        System.out.println(interval);
-        System.out.println(onDate);
-        // System.out.println(from,to,subject,body,attachment,attachCheck,type,interval,onDate);
-        String fileType = "";
-        // if(attachCheck){
-        //   fileType = attachment;
-        // }
-        // Boolean isStore = db.storeMail(pcid,from,to,subject,body,fileType,type,interval);
+      JSONObject jo = new JSONObject();
+      String from = request.getRemoteUser();
+      String to = request.getParameter("to");
+      String subject = request.getParameter("subject");
+      String body = request.getParameter("body");
+      Boolean attachCheck = Boolean.parseBoolean(request.getParameter("attachCheck"));
+      String attache = request.getParameter("attache");
+      String sendType = request.getParameter("sendType");
+      int type1Min = Integer.parseInt(request.getParameter("type1Min"));
+      String type2Date = request.getParameter("type2Date");
 
+      
+      if(!attachCheck){
+        attache = "";
       }
-      else{
-        out.println("<script type=\"text/javascript\">");
-        out.println("alert('You are not authorized to access this page');");
-        out.println("location='/';");
-        out.println("</script>");
+      
+      if(sendType.equals("one")){
+        type1Min=0;
+      }else{
+        type2Date = "";
       }
+      System.out.println("from: "+from);
+      System.out.println("to: "+to);
+      System.out.println("subject: "+subject);
+      System.out.println("body: "+body);
+      System.out.println("attachCheck: "+attachCheck);
+      System.out.println("attache: "+attache);
+      System.out.println("sendType: "+sendType);
+      System.out.println("type1Min: "+type1Min);
+      System.out.println("type2Date: "+type2Date);
+      // Boolean result = db.storeMail(from, to, subject, body, attachCheck, sendType, type1Min, type2Date);
+
+
+
+
+// Boolean isStore = db.storeMail(pcid,from,to,subject,body,fileType,type,interval);
+      try {
+        jo.put("result","feature is not enabled yet");
+      }catch (Exception e) {
+        e.printStackTrace();
+      }
+
+      out.println(jo);
+      out.flush();
 
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Credentials", "true");

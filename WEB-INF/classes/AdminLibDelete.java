@@ -25,45 +25,18 @@ public class AdminLibDelete extends HttpServlet {
         PrintWriter out = response.getWriter();
         System.out.println("delete in lib");
         String userName = request.getParameter("username");
-        String pcid = request.getParameter("pcid");
-        String rawCookie = request.getHeader("Cookie");
 
         JSONObject resSent = new JSONObject();
-        
-        if(rawCookie.length() > 0){
-            String authRole = db.roleChecker(pcid,rawCookie);
-            if(authRole.equals("admin")){
-                Boolean check = db.deleteLib(userName);
-                if (check) {
-                    try{
-                        resSent.put("result","pass");
-                    }
-                    catch(Exception e){
-                        e.printStackTrace();
-                    }
-                }
-                else {
-                    try{
-                        resSent.put("result","fail");
-                    }
-                    catch(Exception e){
-                        e.printStackTrace();
-                    }
-                    
-                }
-            }
-            else{
-                try{
-                    resSent.put("result","error");
-                }
-                catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }
-        else{
+        Boolean check = db.deleteLib(userName);
+        if (check) {
             try{
-                resSent.put("result","error");
+                resSent.put("result","pass");
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }else {
+            try{
+                resSent.put("result","fail");
             }
             catch(Exception e){
                 e.printStackTrace();

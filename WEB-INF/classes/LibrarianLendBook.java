@@ -18,22 +18,12 @@ public class LibrarianLendBook extends HttpServlet {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         String bookId = request.getParameter("bookid");
         String UserName = request.getParameter("username");
-        String pcid = request.getParameter("pcid");
-        String rawCookie = request.getHeader("Cookie");
         String check="Try Again SomeTime";
         PrintWriter out = response.getWriter();
-
-        if(rawCookie.length() > 0){
-            String authRole = db.roleChecker(pcid,rawCookie);
-            if(authRole.equals("librarian")){
-                try {
-                    check = db.lendBook(bookId, UserName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }else{
-                check = "Invalid Authorization";
-            }
+        try {
+            check = db.lendBook(bookId, UserName);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
 

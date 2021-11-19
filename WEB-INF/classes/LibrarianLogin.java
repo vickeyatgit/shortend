@@ -41,36 +41,30 @@ public class LibrarianLogin extends HttpServlet{
     {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         PrintWriter out = response.getWriter();
-        
-        String pcid = request.getParameter("pcid");
-        String rawCookie = request.getHeader("Cookie");
-
-        System.out.println("cookies");
         JSONObject obj = new JSONObject();
+        String username = request.getRemoteUser();
+        // get user role
+        boolean isMgr = request.isUserInRole("librarian");
+        System.out.println("isMgr chech role: " + isMgr);
+        // to get user name
+        java.security.Principal principal = request.getUserPrincipal();
+        String remoteUser = principal.getName();
+        
+        System.out.println("remoteUser: " + remoteUser);
+        Dictionary geek = new Hashtable();
+        geek = db.getLibrarianData(username);
         try {
-            if(rawCookie.length() > 0){
-                String authRole = db.roleChecker(pcid,rawCookie);
-                System.out.println("role");
-                if(authRole.equals("librarian")){
-                    String username = db.getUserName(pcid,rawCookie);
-                    System.out.println("username");
-                    Dictionary geek = new Hashtable();
-                    geek = db.getLibrarianData(username);
-                    try {
-                        obj.put("username",geek.get("username"));
-                        obj.put("firstname",geek.get("firstname"));
-                        obj.put("lastname",geek.get("lastname"));
-                        obj.put("mobile",geek.get("mobilenumner"));
-                        obj.put("email",geek.get("emailid"));
-                        obj.put("tally",geek.get("bookstally"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            obj.put("username",geek.get("username"));
+            obj.put("firstname",geek.get("firstname"));
+            obj.put("lastname",geek.get("lastname"));
+            obj.put("mobile",geek.get("mobilenumner"));
+            obj.put("email",geek.get("emailid"));
+            obj.put("tally",geek.get("bookstally"));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        
         out.print(obj);
     }
 

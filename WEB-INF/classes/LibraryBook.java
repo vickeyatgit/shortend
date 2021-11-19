@@ -21,17 +21,7 @@ public class LibraryBook extends HttpServlet {
         JSONArray ja = new JSONArray();
         System.out.println("clicked innnnn");
         PrintWriter out = response.getWriter();
-
-        String pcid = request.getParameter("pcid");
-        String rawCookie = request.getHeader("Cookie");
-
-        if(rawCookie.length() > 0){
-            String authRole = db.roleChecker(pcid,rawCookie);
-            if(authRole.equals("librarian")){
-                ja = db.librarianBook();
-            }
-        }
-        System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
+        ja = db.librarianBook();
         System.out.println(ja);
         out.println(ja);
 

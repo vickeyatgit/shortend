@@ -314,6 +314,153 @@
     <servlet-name>AutoMail</servlet-name>
     <url-pattern>/AutoMail</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>AdminChecker</display-name>
+    <servlet-name>AdminChecker</servlet-name>
+    <servlet-class>AdminChecker</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminChecker</servlet-name>
+    <url-pattern>/AdminChecker</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LibrarianChecker</display-name>
+    <servlet-name>LibrarianChecker</servlet-name>
+    <servlet-class>LibrarianChecker</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibrarianChecker</servlet-name>
+    <url-pattern>/LibrarianChecker</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>MakeError</display-name>
+    <servlet-name>MakeError</servlet-name>
+    <servlet-class>MakeError</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MakeError</servlet-name>
+    <url-pattern>/MakeError</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>MakeLogin</display-name>
+    <servlet-name>MakeLogin</servlet-name>
+    <servlet-class>MakeLogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MakeLogin</servlet-name>
+    <url-pattern>/MakeLogin</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>Mailme</display-name>
+    <servlet-name>Mailme</servlet-name>
+    <servlet-class>Mailme</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Mailme</servlet-name>
+    <url-pattern>/Mailme</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>Getsession</display-name>
+    <servlet-name>Getsession</servlet-name>
+    <servlet-class>Getsession</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Getsession</servlet-name>
+    <url-pattern>/Getsession</url-pattern>
+  </servlet-mapping>
+
+
+
+
+<!--Defines Security Constraint -->
+  <!-- <security-constraint>
+      <display-name>JSP Demo Constraint</display-name>
+      <web-resource-collection>
+        <web-resource-name>default</web-resource-name>
+        <description>only admin handles routes</description>
+        <url-pattern>/AdminChecker</url-pattern>
+        <url-pattern>/GetLibrarianData</url-pattern>
+        <url-pattern>/AdminLibDelete</url-pattern>
+        <url-pattern>/GetFilePdf</url-pattern>
+        <url-pattern>/GetFileHtml</url-pattern>
+        <url-pattern>/GetFileReq</url-pattern>
+        <url-pattern>/GetFilexls</url-pattern>
+        <url-pattern>/Mailme</url-pattern>
+        <url-pattern>/StoreMail</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+        <description/>
+        <role-name>admin</role-name>
+      </auth-constraint>
+  </security-constraint> -->
+
+  <!-- <security-constraint>
+      <display-name>JSP Demo Constraints</display-name>
+      <web-resource-collection>
+        <web-resource-name>default</web-resource-name>
+        <description>only librarian handles routes</description>
+        <url-pattern>/LibrarianChecker</url-pattern>
+        <url-pattern>/LibBookInsert</url-pattern>
+        <url-pattern>/AddReader</url-pattern>
+        <url-pattern>/LendingData</url-pattern>
+        <url-pattern>/LibrarianLogin</url-pattern>
+        <url-pattern>/LibraryBook</url-pattern>
+        <url-pattern>/FilterBooks</url-pattern>
+        <url-pattern>/RemoveBooks</url-pattern>
+        <url-pattern>/LibrarianLendBook</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+        <description/>
+        <role-name>librarian</role-name>
+      </auth-constraint>
+  </security-constraint> -->
+        <!-- <http-method>OPTIONS</http-method> -->
+<security-constraint>
+  <display-name>JSP Demo Constraints</display-name>
+  <web-resource-collection>
+  <url-pattern>/Getsession</url-pattern>
+</web-resource-collection>
+<auth-constraint>
+  <description/>
+  <role-name>*</role-name>
+  </auth-constraint>
+</security-constraint>
+<!--Defines Login Config -->
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>file</realm-name>
+        <form-login-config>
+            <form-login-page>/MakeLogin</form-login-page>
+            <!-- <form-login-page>/login.jsp</form-login-page> -->
+            <form-error-page>/MakeError</form-error-page>
+        </form-login-config>
+    </login-config>
+
+
+<!--Defines Security Role -->
+    <!-- <security-role>
+        <description/>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>librarian</role-name>
+    </security-role> -->
+
+<!-- session time out -->
+<!-- <session-config> <session-timeout>100</session-timeout> </session-config> -->
 
 <!-- cors -->
   <filter>
@@ -321,7 +468,7 @@
     <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
     <init-param>
       <param-name>cors.allowed.origins</param-name>
-      <param-value>http://localhost:4200</param-value> <!--  add allowed origins separated by comma eg: http://www.broadcom.net -->
+      <param-value>http://localhost:4200</param-value> 
     </init-param>
     <init-param>
       <param-name>cors.allowed.methods</param-name>
@@ -329,7 +476,7 @@
     </init-param>
     <init-param>
       <param-name>cors.allowed.headers</param-name>
-      <param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers</param-value>
+      <param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization</param-value>
     </init-param>
     <init-param>
       <param-name>cors.exposed.headers</param-name>
@@ -349,44 +496,13 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 <!-- /cors -->
-
-<!--Defines Security Constraint -->
-  <security-constraint>
-      <display-name>JSP Demo Constraint</display-name>
-      <web-resource-collection>
-        <web-resource-name>ReadersData</web-resource-name>
-        <description/>
-        <url-pattern>/ReadersData</url-pattern>
-      </web-resource-collection>
-      <auth-constraint>
-        <description/>
-        <role-name>admin</role-name>
-      </auth-constraint>
-  </security-constraint>
-
-<!--Defines Login Config -->
-    <login-config>
-        <auth-method>FORM</auth-method>
-        <realm-name>file</realm-name>
-        <form-login-config>
-            <form-login-page>/printLogin.jsp</form-login-page>
-            <!-- <form-login-page>/login.jsp</form-login-page> -->
-            <form-error-page>/error.jsp</form-error-page>
-        </form-login-config>
-    </login-config>
-
-
-<!--Defines Security Role -->
-    <security-role>
-        <description/>
-        <role-name>admin</role-name>
-    </security-role>
-    <security-role>
-        <description/>
-        <role-name>librarian</role-name>
-    </security-role>
-
-<!-- session time out -->
-<session-config> <session-timeout>100</session-timeout> </session-config>
+<filter>
+  <filter-name>f1</filter-name>  
+  <filter-class>MyFilter</filter-class>  
+</filter>  
+<filter-mapping>  
+  <filter-name>f1</filter-name>  
+  <url-pattern>/*</url-pattern>  
+</filter-mapping>  
 
 </web-app>

@@ -30,19 +30,8 @@ public class FilterBooks extends HttpServlet {
         String cat = request.getParameter("cat");
         String auth = request.getParameter("auth");
         String avai = request.getParameter("avai");
-        String pcid = request.getParameter("pcid");
-        String rawCookie = request.getHeader("Cookie");
-
         JSONArray ja = new JSONArray();
-
-        if(rawCookie.length() > 0){
-            String authRole = db.roleChecker(pcid,rawCookie);
-            if(authRole.equals("librarian")){
-                ja = db.filterBooks(title, lang, auth, cat, avai);
-            }
-        }
-
-        
+        ja = db.filterBooks(title, lang, auth, cat, avai);
         System.out.println("==================");
         System.out.println(title);
         System.out.println(lang);
