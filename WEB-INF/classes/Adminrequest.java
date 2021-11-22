@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import dbaction.Dbclass;
 import java.util.ArrayList;
+import org.json.*; 
 
-public class AdminChecker extends HttpServlet {
+public class Adminrequest extends HttpServlet {
 
   Dbclass db = new Dbclass();
 
@@ -17,7 +18,12 @@ public class AdminChecker extends HttpServlet {
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
     PrintWriter out = response.getWriter();
-    out.println("admin");
+    JSONArray ja = new JSONArray();
+    ja=db.listOfUnRole();
+    out.println(ja);
+    out.flush();
+    out.close();
+
 	}
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response) 
@@ -26,7 +32,7 @@ public class AdminChecker extends HttpServlet {
     response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
     PrintWriter out = response.getWriter();
     // String op[] = db.checkLoginCredentials("mywps010@gmail.com", "PointBreak@1999");
-    out.println("check");
+    // out.println("check");
   }
 
 }

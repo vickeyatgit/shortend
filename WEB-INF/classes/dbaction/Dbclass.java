@@ -914,6 +914,144 @@ public class Dbclass {
         return suc;
     }
 
+    //account check login credentials for all in one
+    public ArrayList<String> checkLoginCredentials(String username,String password){
+        String[] carry = new String[2];
+        System.out.println("in dbaction");
+        ArrayList list=new ArrayList();
+        // Array temp;
+        String query = "SELECT * FROM account WHERE email='"+username+"' AND password='"+password+"';";
+        try {  
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                System.out.println("catch");
+                // temp = result.getArray("role");
+                Array cities = result.getArray("role");
+                String[] str_cities = (String[])cities.getArray();
+                for (String str : str_cities) 
+                    list.add(str);
+            }
+            System.out.println("no user");
+        }catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("error"+ e);
+        }
+        return list;
+    }
+    //create new user
+    public Boolean makeLoginCredentials(String email,String fullname,String phone,String password){
+        Boolean suc = false;
+        String query = "INSERT INTO account (email,password,fullname,mobilenumber) VALUES (?,?,?,?);";
+        try {  
+            Connection con = getConnection();
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+            pstmt.setString(3, fullname);
+            pstmt.setString(4, phone);
+            int affectedrows = pstmt.executeUpdate();
+            if(affectedrows>0) suc=true;
+        }catch (Exception e) {
+            //TODO: handle exception
+            e.printStackTrace();
+        }
+        return suc;
+    }
 
+    //list of unrole user
+    public JSONArray listOfUnRole(){
+        System.out.println("in list of unrule");
+        JSONArray ja = new JSONArray();
+        String bookLend = "SELECT * FROM account WHERE role IS NULL; ";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(bookLend);
+            while (result.next()) {
+                System.out.println("true");
+                JSONObject jo = new JSONObject();
+                jo.put("email", result.getString("email"));
+                jo.put("fullname", result.getString("fullname"));
+                ja.put(jo);
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ja;
+    }
+
+    public JSONArray roleAndResourse() {
+        System.out.println("enter role");
+        JSONArray ja = new JSONArray();
+        String bookLend = "SELECT * FROM resourcecheck; ";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(bookLend);
+            while (result.next()) {
+                System.out.println("true");
+                JSONObject jo = new JSONObject();
+                jo.put("role", result.getString("role"));
+                ArrayList list=new ArrayList();
+                Array cities = result.getArray("resource");
+                String[] str_cities = (String[])cities.getArray();
+                for (String str : str_cities) 
+                    list.add(str);
+                jo.put("resources", list);
+                ja.put(jo);
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ja;
+    }
+
+    //insert role and resource
+    public boolean insertRoleToUser(String user,String[] role){
+        boolean check = false;
+        String query1 = "UPDATE account SET role = ? WHERE email = ?;";
+        try {
+            Connection con = getConnection();
+            PreparedStatement pstmt1 = con.prepareStatement(query1);
+            pstmt1.setArray(1, con.createArrayOf("TEXT", role));// array
+            pstmt1.setString(2, user);
+            int affectedrows1 = pstmt1.executeUpdate();
+            pstmt1.close();
+            if(affectedrows1 > 0) {
+                check=true;
+            }
+            // PreparedStatement pstmt = con.prepareStatement(query);
+            // pstmt.setString(1, role);
+            // pstmt.setArray(2, con.createArrayOf("TEXT", resource));
+            // int affectedrows = pstmt.executeUpdate();
+            // // if(affectedrows>0) check=true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    //create new role and resource
+    public boolean createRoleAndResource(String role,String[] resource){
+        boolean check = false;
+        String query1 = "INSERT INTO resourcecheck (role,resource) VALUES (?,?);";
+        try {
+            Connection con = getConnection();
+            PreparedStatement pstmt = con.prepareStatement(query1);
+            pstmt.setString(1, role);
+            pstmt.setArray(2, con.createArrayOf("TEXT", resource));
+            int affectedrows = pstmt.executeUpdate();
+            if(affectedrows>0) check=true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            check = false;
+        }
+        return check;
+        }
 }
 

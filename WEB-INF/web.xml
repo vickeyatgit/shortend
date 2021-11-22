@@ -381,6 +381,50 @@
     <url-pattern>/Getsession</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <description></description>
+    <display-name>Adminrequest</display-name>
+    <servlet-name>Adminrequest</servlet-name>
+    <servlet-class>Adminrequest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Adminrequest</servlet-name>
+    <url-pattern>/Adminrequest</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>AdminInsertRole</display-name>
+    <servlet-name>AdminInsertRole</servlet-name>
+    <servlet-class>AdminInsertRole</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminInsertRole</servlet-name>
+    <url-pattern>/AdminInsertRole</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>Adminauthority</display-name>
+    <servlet-name>Adminauthority</servlet-name>
+    <servlet-class>Adminauthority</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Adminauthority</servlet-name>
+    <url-pattern>/Adminauthority</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>AdminCreateRole</display-name>
+    <servlet-name>AdminCreateRole</servlet-name>
+    <servlet-class>AdminCreateRole</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminCreateRole</servlet-name>
+    <url-pattern>/AdminCreateRole</url-pattern>
+  </servlet-mapping>
+
 
 
 

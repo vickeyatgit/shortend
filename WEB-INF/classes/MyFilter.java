@@ -5,7 +5,7 @@ import java.util.*;
 import javax.servlet.http.*;
 import java.io.*;
 import java.sql.*;
-
+import java.security.Principal;
 
 public class MyFilter implements Filter{  
     public void init(FilterConfig filterConfig) throws ServletException {  
@@ -26,6 +26,7 @@ public class MyFilter implements Filter{
         String url = request1.getRequestURI();
         System.out.println("url: " + url);
 
+
         Boolean reDirect = false;
         System.out.println("is admin: " + request1.isUserInRole("admin"));
         System.out.println("is user: " + request1.getRemoteUser());
@@ -34,7 +35,8 @@ public class MyFilter implements Filter{
             "/shortend/AdminChecker","/shortend/GetLibrarianData","/shortend/AdminLibDelete",
             "/shortend/GetFilePdf","/shortend/GetFileHtml","/shortend/GetFileReq",
             "/shortend/GetFilexls","/shortend/Mailme","/shortend/StoreMail",
-            "/shortend/AdminLibInsert","/shortend/Logout"
+            "/shortend/AdminLibInsert","/shortend/Logout","/shortend/Adminrequest",
+            "/shortend/AdminInsertRole","/shortend/Adminauthority","/shortend/AdminCreateRole",
           };  // array of strings
           List<String> adminUrlList = new ArrayList<>(Arrays.asList(adminUrlContainer));
           reDirect = adminUrlList.contains(url);
@@ -52,8 +54,12 @@ public class MyFilter implements Filter{
           System.out.println("in condition in librarian: " + reDirect);
         }
         else{
-            reDirect = false;
+            // reDirect = true;
+            if(url.equals("/shortend/Createadmin")){
+              reDirect = true;
+            }
         }
+        // reDirect = true;
         // System.out.println("j security check");
         // if("shortend/j_security_check".equals(url) || "shortend/MakeLogin".equals(url)
         //     || "shortend/MakeLogout".equals(url) || "shortend/LibrarianChecker".equals(url)
