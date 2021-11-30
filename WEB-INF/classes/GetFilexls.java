@@ -25,19 +25,50 @@ public class GetFilexls extends HttpServlet {
                 response.setContentType( "application/vnd.ms-excel" ); 
                 response.setHeader("Content-disposition","attachment; filename=Example.xls");
 
-                String newData="<table><tr><th>S_NO.</th><th>Username</th><th>First Name</th><th>Last Name</th><th>Email Id</th><th>Mobile Number</th></tr>";
+                String newData="<table><tr><th>S_NO.</th><th>Name</th><th>Email Id</th><th>Mobile Number</th><th>Role</th></tr>";
                 ArrayList<ArrayList<String>> graph = new ArrayList<>();
-                graph = db.librarianGetList();
-                for (int count = 0; count < graph.size(); count++) {
-                    newData +="<tr>";
-                    newData += "<td>"+String.valueOf((count+1))+"</td>";
-                    newData += "<td>"+graph.get(count).get(0)+"</td>";
-                    newData += "<td>"+graph.get(count).get(1)+"</td>";
-                    newData += "<td>"+graph.get(count).get(2)+"</td>";
-                    newData += "<td>"+graph.get(count).get(3)+"</td>";
-                    newData += "<td>"+graph.get(count).get(4)+"</td>";
-                    newData += "</tr>";
+                // graph = db.librarianGetList();
+                JSONArray ja = new JSONArray();
+                ja = db.getUserDateWithRole();
+                try {
+                    for (int count = 0; count < ja.length(); count++) {
+                        JSONObject item = ja.getJSONObject(count);
+                        String name = item.getString("name");
+                        String email = item.getString("email");
+                        String mobile = item.getString("mobile");
+                        JSONArray temp = item.getJSONArray("role");
+                        newData +="<tr>";
+                        newData += "<td>"+String.valueOf((count+1))+"</td>";
+                        newData += "<td>"+name+"</td>";
+                        newData += "<td>"+email+"</td>";
+                        newData += "<td>"+mobile+"</td>";
+                        String role = "";
+                        for (int j = 0; j < temp.length(); j++) {
+                            String pet = temp.getString(j);
+                                role += pet;
+                                if(j != temp.length()-1){
+                                    role += ",";
+                                }
+                            }
+                        newData += "<td>"+role+"</td>";
+                        // newData += "<td>"+graph.get(count).get(3)+"</td>";
+                        // newData += "<td>"+graph.get(count).get(4)+"</td>";
+                        newData += "</tr>";
+                    }
+                } catch (Exception e) {
+                    //TODO: handle exception
+                    e.printStackTrace();
                 }
+                // for (int count = 0; count < graph.size(); count++) {
+                //     newData +="<tr>";
+                //     newData += "<td>"+String.valueOf((count+1))+"</td>";
+                //     newData += "<td>"+graph.get(count).get(0)+"</td>";
+                //     newData += "<td>"+graph.get(count).get(1)+"</td>";
+                //     newData += "<td>"+graph.get(count).get(2)+"</td>";
+                //     newData += "<td>"+graph.get(count).get(3)+"</td>";
+                //     newData += "<td>"+graph.get(count).get(4)+"</td>";
+                //     newData += "</tr>";
+                // }
                 newData += "</table > ";  
                 try
                 {

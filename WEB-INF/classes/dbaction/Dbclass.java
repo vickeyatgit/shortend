@@ -927,7 +927,6 @@ public class Dbclass {
             ResultSet result = state.executeQuery(query);
             while (result.next()) {
                 System.out.println("catch");
-                // temp = result.getArray("role");
                 Array cities = result.getArray("role");
                 String[] str_cities = (String[])cities.getArray();
                 for (String str : str_cities) 
@@ -940,6 +939,7 @@ public class Dbclass {
         }
         return list;
     }
+
     //create new user
     public Boolean makeLoginCredentials(String email,String fullname,String phone,String password){
         Boolean suc = false;
@@ -954,7 +954,6 @@ public class Dbclass {
             int affectedrows = pstmt.executeUpdate();
             if(affectedrows>0) suc=true;
         }catch (Exception e) {
-            //TODO: handle exception
             e.printStackTrace();
         }
         return suc;
@@ -983,6 +982,7 @@ public class Dbclass {
         return ja;
     }
 
+    //get lst of role and resources
     public JSONArray roleAndResourse() {
         System.out.println("enter role");
         JSONArray ja = new JSONArray();
@@ -1002,7 +1002,6 @@ public class Dbclass {
                     list.add(str);
                 jo.put("resources", list);
                 ja.put(jo);
-                
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1024,11 +1023,6 @@ public class Dbclass {
             if(affectedrows1 > 0) {
                 check=true;
             }
-            // PreparedStatement pstmt = con.prepareStatement(query);
-            // pstmt.setString(1, role);
-            // pstmt.setArray(2, con.createArrayOf("TEXT", resource));
-            // int affectedrows = pstmt.executeUpdate();
-            // // if(affectedrows>0) check=true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1052,6 +1046,152 @@ public class Dbclass {
             check = false;
         }
         return check;
+    }
+
+    //get userData
+    public JSONObject getUserData(String email){
+        JSONObject jo = new JSONObject();
+        String query = "SELECT email,fullname,mobilenumber FROM account WHERE email = '"+email+"';";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                jo.put("email", result.getString("email"));
+                jo.put("name", result.getString("fullname"));
+                jo.put("mobile", result.getString("mobilenumber"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-}
+        return jo;
+    }
+
+    //uncomment after testing
+    //delete user data
+    public boolean deleteAccount(String email){
+        boolean check = false;
+        try {
+            Connection con = getConnection();
+            String query = "DELETE FROM account WHERE email = '"+email+"';";
+            Statement state = con.createStatement();
+            int affectedrows = state.executeUpdate(query);
+            if(affectedrows>0) check=true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    // get user data from account with roles only
+    public JSONArray getUserDateWithRole(){
+        JSONArray ja = new JSONArray();
+        String query = "SELECT email,fullname,mobilenumber,role FROM account WHERE role IS NOT NULL;";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                JSONObject jo = new JSONObject();
+                jo.put("email", result.getString("email"));
+                jo.put("name", result.getString("fullname"));
+                jo.put("mobile", result.getString("mobilenumber"));
+                // jo.put("role", result.getString("role"));
+
+                ArrayList list=new ArrayList();
+                Array cities = result.getArray("role");
+                String[] str_cities = (String[])cities.getArray();
+                for (String str : str_cities) 
+                    list.add(str);
+                jo.put("role", list);
+                ja.put(jo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ja;
+    }
+
+    //filter user data with role
+    public JSONArray filterUserDataWithRole(String name){
+        JSONArray ja = new JSONArray();
+        // String sql = " SELECT * FROM librarian WHERE username LIKE '%" + value + "%' ;";
+        String query = "SELECT email,fullname,mobilenumber,role FROM account WHERE fullname LIKE '%"+name+"%';";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                JSONObject jo = new JSONObject();
+                jo.put("email", result.getString("email"));
+                jo.put("name", result.getString("fullname"));
+                jo.put("mobile", result.getString("mobilenumber"));
+                ArrayList list=new ArrayList();
+                Array cities = result.getArray("role");
+                String[] str_cities = (String[])cities.getArray();
+                for (String str : str_cities) 
+                    list.add(str);
+                jo.put("role", list);
+                ja.put(jo);
+            }
+        // for (int i=0; i<ja.length(); i++) {
+        //     JSONObject item = ja.getJSONObject(i);
+        //     String name1 = item.getString("name");
+        //     String email = item.getString("email");
+        //     String mobile = item.getString("mobile");
+        //     JSONArray temp = item.getJSONArray("role");
+        //     System.out.println("data: " + name1 + " " + email + " " + mobile );
+        //     for (int j = 0; j < temp.length(); j++) {
+        //     String pet = temp.getString(j);
+        //     System.out.println("role: " + pet);
+        //     }
+        // }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ja;
+    }
+
+    //get password from account
+    public String getPassword(String email){
+        String password = "";
+        String query = "SELECT password FROM account WHERE email = '"+email+"';";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                password = result.getString("password");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return password;
+    }
+
+    //get role from resource
+    //but now not applicable
+    public ArrayList<String> getRole(String email){
+        ArrayList<String> list = new ArrayList<String>();
+        String query = "SELECT role FROM resourcecheck WHERE email = '"+email+"';";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                ArrayList<String> temp = new ArrayList<String>();
+                Array cities = result.getArray("role");
+                String[] str_cities = (String[])cities.getArray();
+                for (String str : str_cities) 
+                    temp.add(str);
+                list.addAll(temp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    }
 

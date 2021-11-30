@@ -17,12 +17,12 @@ import java.util.*;
 public class LoginModulelog implements LoginModule {
     private CallbackHandler callbackHandler = null;
     private Boolean check = false;
-	private Subject subject;
-	UserPrincipal userPrincipal = null;
-	RolePrincipal rolePrincipal = null;
-	private String login;
-	List<String> userGroups;
-	Dbclass ddb = new Dbclass();
+		private Subject subject;
+		UserPrincipal userPrincipal = null;
+		RolePrincipal rolePrincipal = null;
+		private String login;
+		List<String> userGroups;
+		Dbclass ddb = new Dbclass();
 	
 
     @Override
@@ -52,28 +52,44 @@ public class LoginModulelog implements LoginModule {
 		}
 		String name = ((NameCallback) callbackArray[0]).getName();
 		String password = new String(((PasswordCallback) callbackArray[1]).getPassword());
-		Boolean userCheck = ddb.login(name, password);
-		System.out.println("in LOGIN MODULE "+userCheck);
-
-		
-		//admin check
-		if(userCheck){
+		//old scenario
+		// Boolean userCheck = ddb.login(name, password);
+		// System.out.println("in LOGIN MODULE "+userCheck);
+		// //admin check
+		// if(userCheck){
+		// 	login = name;
+		// 	userGroups = new ArrayList<String>();
+		// 	userGroups.add("admin");
+		// 	check=userCheck;
+		// } else {
+		// 	//librarian check
+		// 	Boolean libCheck = ddb.loginLibrarian(name, password);
+		// 	if (libCheck) {
+		// 		login = name;
+		// 		userGroups = new ArrayList<String>();
+		// 		userGroups.add("librarian");
+		// 		check = libCheck;
+		// 	} else {
+		// 		check = false;
+		// 	}
+		// }
+		ArrayList<String> rolesInBag = new ArrayList<String>();
+		rolesInBag = ddb.checkLoginCredentials(name,password);
+		System.out.println("in LOGIN MODULE ");
+		System.out.println("in LOGIN MODULE "+rolesInBag.size());
+		System.out.println("in LOGIN MODULE ");
+		if(rolesInBag.size()>0){
 			login = name;
-			userGroups = new ArrayList<String>();
-			userGroups.add("admin");
-			check=userCheck;
-		} else {
-			//librarian check
-			Boolean libCheck = ddb.loginLibrarian(name, password);
-			if (libCheck) {
-				login = name;
-				userGroups = new ArrayList<String>();
-				userGroups.add("librarian");
-				check = libCheck;
-			} else {
-				check = false;
-			}
+			userGroups = rolesInBag;
+			check = true;
+			// set the principal
 		}
+		else{
+			//failure
+			check = false;
+		}
+
+
 		return check;
 	}
 

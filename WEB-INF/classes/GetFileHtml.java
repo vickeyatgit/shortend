@@ -16,27 +16,57 @@ import java.io.PrintWriter;
 import javax.servlet.*;
 // import org.json.*;
 import java.io.*;
-
+import org.json.*;
 
 public class GetFileHtml extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
                 response.setContentType("text/plain");
                 response.setHeader("Content-Disposition", "attachment; filename=\"librariabView.html\"");
-                String newData="<table>\n\t<tr>\n\t\t<th>S_NO.</th>\n\t\t<th>Username</th>\n\t\t<th>First Name</th>\n\t\t<th>Last Name</th>\n\t\t<th>Email Id</th>\n\t\t<th>Mobile Number</th>\n\t</tr>";
+                String newData="<table style='border: 1px solid black;'>\n\t<tr>\n\t\t<th style='border: 1px solid black;'>S_NO.</th>\n\t\t<th style='border: 1px solid black;'>Name</th>\n\t\t<th style='border: 1px solid black;'>Email Id</th>\n\t\t<th style='border: 1px solid black;'>Mobile Number</th>\n\t\t<th style='border: 1px solid black;'>Role</th>\n\t</tr>";
                 Dbclass db = new Dbclass();
                 ArrayList<ArrayList<String>> graph = new ArrayList<>();
-                graph = db.librarianGetList();
-                for (int count = 0; count < graph.size(); count++) {
-                    newData +="\n\t<tr>";
-                    newData += "\n\t\t<td>"+String.valueOf((count+1))+"</td>";
-                    newData += "\n\t\t<td>"+graph.get(count).get(0)+"</td>";
-                    newData += "\n\t\t<td>"+graph.get(count).get(1)+"</td>";
-                    newData += "\n\t\t<td>"+graph.get(count).get(2)+"</td>";
-                    newData += "\n\t\t<td>"+graph.get(count).get(3)+"</td>";
-                    newData += "\n\t\t<td>"+graph.get(count).get(4)+"</td>";
-                    newData += "\n\t</tr>";
+                // graph = db.librarianGetList();
+                JSONArray ja = new JSONArray();
+                ja = db.getUserDateWithRole();
+                try {
+                        for (int count = 0; count < ja.length(); count++) {
+                        JSONObject item = ja.getJSONObject(count);
+                        String name = item.getString("name");
+                        String email = item.getString("email");
+                        String mobile = item.getString("mobile");
+                        JSONArray temp = item.getJSONArray("role");
+                        newData +="\n\t<tr>";
+                        newData += "\n\t\t<td style='border: 1px solid black;'>"+String.valueOf((count+1))+"</td>";
+                        newData += "\n\t\t<td style='border: 1px solid black;'>"+name+"</td>";
+                        newData += "\n\t\t<td style='border: 1px solid black;'>"+email+"</td>";
+                        newData += "\n\t\t<td style='border: 1px solid black;'>"+mobile+"</td>";
+                        newData += "\n\t\t<td style='border: 1px solid black;'>";
+                        for (int j = 0; j < temp.length(); j++) {
+                                String pet = temp.getString(j);
+                                newData += pet;
+                                if(j != temp.length()-1){
+                                    newData += ",";
+                                }
+                            }
+                        newData += "</td>";
+                        newData += "\n\t</tr>";
+                    }
+                } catch (Exception e) {
+                    //TODO: handle exception
+                    e.printStackTrace();
                 }
+                
+                // for (int count = 0; count < graph.size(); count++) {
+                //     newData +="\n\t<tr>";
+                //     newData += "\n\t\t<td>"+String.valueOf((count+1))+"</td>";
+                //     newData += "\n\t\t<td>"+graph.get(count).get(0)+"</td>";
+                //     newData += "\n\t\t<td>"+graph.get(count).get(1)+"</td>";
+                //     newData += "\n\t\t<td>"+graph.get(count).get(2)+"</td>";
+                //     newData += "\n\t\t<td>"+graph.get(count).get(3)+"</td>";
+                //     newData += "\n\t\t<td>"+graph.get(count).get(4)+"</td>";
+                //     newData += "\n\t</tr>";
+                // }
                 newData += "\n</table > "; 
                 try {
                     OutputStream outputStream = response.getOutputStream();

@@ -16,6 +16,8 @@ import java.io.PrintWriter;
 import javax.servlet.*;
 import org.json.*;
 import java.io.*;
+import java.util.*;
+
 //pdf
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,7 +35,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
- 
+
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -60,11 +62,14 @@ public class GetFilePdf extends HttpServlet {
                     PdfWriter.getInstance(document, response.getOutputStream());
 
                     document.open();
-                    PdfPTable table = new PdfPTable(6);
+                    PdfPTable table = new PdfPTable(5);
                     ArrayList<ArrayList<String>> graph = new ArrayList<>();
-                    graph = db.librarianGetList();
+                    // graph = db.librarianGetList();
+                    JSONArray ja = new JSONArray();
+                    ja = db.getUserDateWithRole();
 
-                    Stream.of("S_NO","Username","First Name","Last Name","Email Id","Mobile Number")
+                    // S_NO.	Name	Email Id	Mobile Number	Role
+                    Stream.of("S_NO","Name","Email Id","Mobile Number","Role")
                     .forEach(columnTitle -> {
                         PdfPCell header = new PdfPCell();
                         header.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -72,14 +77,37 @@ public class GetFilePdf extends HttpServlet {
                         header.setPhrase(new Phrase(columnTitle));
                         table.addCell(header);
                     });
-                    for (int count = 0; count < graph.size(); count++) {
-                        table.addCell(String.valueOf((count+1)));
-                        table.addCell(graph.get(count).get(0));
-                        table.addCell(graph.get(count).get(1));
-                        table.addCell(graph.get(count).get(2));
-                        table.addCell(graph.get(count).get(3));
-                        table.addCell(graph.get(count).get(4));                  
-                }
+                    for (int i=0; i<ja.length(); i++) {
+                        JSONObject item = ja.getJSONObject(i);
+                        String name = item.getString("name");
+                        String email = item.getString("email");
+                        String mobile = item.getString("mobile");
+                        JSONArray temp = item.getJSONArray("role");
+                        String role = "[";
+                        ArrayList<String> array = new ArrayList<String>();
+                        for (int j = 0; j < temp.length(); j++) {
+                            String pet = temp.getString(j);
+                            role += pet;
+                            if(j != temp.length()-1){
+                                role += ",";
+                            }
+                            array.add(pet);
+                        }
+                        role += "]";
+                        table.addCell(String.valueOf((i+1)));
+                        table.addCell(name);
+                        table.addCell(email);
+                        table.addCell(mobile);
+                        table.addCell(role);
+                    }
+                //     for (int count = 0; count < graph.size(); count++) {
+                //         table.addCell(String.valueOf((count+1)));
+                //         table.addCell(graph.get(count).get(0));
+                //         table.addCell(graph.get(count).get(1));
+                //         table.addCell(graph.get(count).get(2));
+                //         table.addCell(graph.get(count).get(3));
+                //         table.addCell(graph.get(count).get(4));                  
+                // }
                     Paragraph paragraph = new Paragraph("Librarian Data");
 
                     document.add(paragraph);

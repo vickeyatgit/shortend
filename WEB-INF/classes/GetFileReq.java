@@ -28,18 +28,47 @@ public class GetFileReq extends HttpServlet {
                 JSONArray hi = new JSONArray();
                 hi = db.readersData();
                 String data = "a,b,c,d";
-                String newData="S_NO,Username,First Name,Last Name,Email Id,Mobile Number\n";
+                String newData="S_NO,Name,Email Id,Mobile Number,Role\n";
                 ArrayList<ArrayList<String>> graph = new ArrayList<>();
-                graph = db.librarianGetList();
-                for (int count = 0; count < graph.size(); count++) {
-                    newData += String.valueOf((count+1))+",";
-                    newData += graph.get(count).get(0)+",";
-                    newData += graph.get(count).get(1)+",";
-                    newData += graph.get(count).get(2)+",";
-                    newData += graph.get(count).get(3)+",";
-                    newData += graph.get(count).get(4)+",\n";
-                    
+                // graph = db.librarianGetList();
+                JSONArray ja = new JSONArray();
+                ja = db.getUserDateWithRole();
+                try {
+                    for (int i=0; i<ja.length(); i++) {
+                        JSONObject jo = ja.getJSONObject(i);
+                        String s_no = String.valueOf((i+1));
+                        String name = jo.getString("name");
+                        String email = jo.getString("email");
+                        String mobile = jo.getString("mobile");
+                        JSONArray temp = jo.getJSONArray("role");
+                        String role = "\"";
+                        ArrayList<String> array = new ArrayList<String>();
+                        for (int j = 0; j < temp.length(); j++) {
+                            String pet = temp.getString(j);
+                            role += pet;
+                            if(j != temp.length()-1){
+                                role += ",";
+                            }
+                            array.add(pet);
+                        }
+                        role += "\"";
+                        newData = newData + s_no + "," + name + "," + email + "," + mobile + "," + role + "\n";
+                    }
+                } catch (Exception e) {
+                    //TODO: handle exception
+                    e.printStackTrace();
                 }
+                
+                
+
+                // for (int count = 0; count < graph.size(); count++) {
+                //     newData += String.valueOf((count+1))+",";
+                //     newData += graph.get(count).get(0)+",";
+                //     newData += graph.get(count).get(1)+",";
+                //     newData += graph.get(count).get(2)+",";
+                //     newData += graph.get(count).get(3)+",";
+                //     newData += graph.get(count).get(4)+",\n";
+                // }
 
                 System.out.println(newData);
                 response.setContentType("text/csv");

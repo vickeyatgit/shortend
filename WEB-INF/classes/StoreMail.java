@@ -45,6 +45,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Phrase;
 import java.util.Base64;
+import org.json.*;
 
 public class StoreMail extends HttpServlet {
 
@@ -310,7 +311,7 @@ public class StoreMail extends HttpServlet {
                 Boolean result = false;
                 String from = request.getRemoteUser();
                 System.out.println("from"+from);
-                String pass = db.GetUserPassword(from);
+                String pass = db.getPassword(from);
                 String to = request.getParameter("to");
                 String subject = request.getParameter("subject");
                 String body = request.getParameter("body");
@@ -341,22 +342,41 @@ public class StoreMail extends HttpServlet {
                 String filename="";
                 if(attachCheck){
                     ArrayList<ArrayList<String>> graph = new ArrayList<>();
-                    graph = db.librarianGetList();
+                    // graph = db.librarianGetList();
+                    JSONArray ja = new JSONArray();
+                    ja = db.getUserDateWithRole();
                     switch (attachment) {
                         case "html":
                             {
-                                String newData="<table>\n\t<tr>\n\t\t<th>S_NO.</th>\n\t\t<th>Username</th>\n\t\t<th>First Name</th>\n\t\t<th>Last Name</th>\n\t\t<th>Email Id</th>\n\t\t<th>Mobile Number</th>\n\t</tr>";
-                                for (int count = 0; count < graph.size(); count++) {
-                                    newData +="\n\t<tr>";
-                                    newData += "\n\t\t<td>"+String.valueOf((count+1))+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(0)+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(1)+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(2)+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(3)+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(4)+"</td>";
-                                    newData += "\n\t</tr>";
+                                String newData="<table style='border: 1px solid black;'>\n\t<tr>\n\t\t<th style='border: 1px solid black;'>S_NO.</th>\n\t\t<th style='border: 1px solid black;'>Name</th>\n\t\t<th style='border: 1px solid black;'>Email Id</th>\n\t\t<th style='border: 1px solid black;'>Mobile Number</th>\n\t\t<th style='border: 1px solid black;'>Role</th>\n\t</tr>";
+                                try {
+                                    for (int count = 0; count < ja.length(); count++) {
+                                        JSONObject item = ja.getJSONObject(count);
+                                        String name = item.getString("name");
+                                        String email = item.getString("email");
+                                        String mobile = item.getString("mobile");
+                                        JSONArray temp = item.getJSONArray("role");
+                                        newData +="\n\t<tr>";
+                                        newData += "\n\t\t<td style='border: 1px solid black;'>"+String.valueOf((count+1))+"</td>";
+                                        newData += "\n\t\t<td style='border: 1px solid black;'>"+name+"</td>";
+                                        newData += "\n\t\t<td style='border: 1px solid black;'>"+email+"</td>";
+                                        newData += "\n\t\t<td style='border: 1px solid black;'>"+mobile+"</td>";
+                                        newData += "\n\t\t<td style='border: 1px solid black;'>";
+                                        for (int j = 0; j < temp.length(); j++) {
+                                                String pet = temp.getString(j);
+                                                newData += pet;
+                                                if(j != temp.length()-1){
+                                                    newData += ",";
+                                                }
+                                            }
+                                        newData += "</td>";
+                                        newData += "\n\t</tr>";
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                                newData += "\n</table > ";
+                                newData += "\n</table > "; 
+                                // create file
                                 try {
                                     FileWriter myWriter = new FileWriter("librarian.html");
                                     myWriter.write(newData);
@@ -376,8 +396,8 @@ public class StoreMail extends HttpServlet {
                                     OutputStream outputStream = new FileOutputStream(new File("librarian.pdf"));
                                     PdfWriter.getInstance(document, outputStream);
                                     document.open();
-                                    PdfPTable table = new PdfPTable(6);
-                                    Stream.of("S_NO","Username","First Name","Last Name","Email Id","Mobile Number")
+                                    PdfPTable table = new PdfPTable(5);
+                                    Stream.of("S_NO","Name","Email Id","Mobile Number","Role")
                                     .forEach(columnTitle -> {
                                         PdfPCell header = new PdfPCell();
                                         header.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -385,13 +405,33 @@ public class StoreMail extends HttpServlet {
                                         header.setPhrase(new Phrase(columnTitle));
                                         table.addCell(header);
                                     });
-                                    for (int count = 0; count < graph.size(); count++) {
+                                    for (int count = 0; count < ja.length(); count++) {
+                                        JSONObject item = ja.getJSONObject(count);
+                                        String name = item.getString("name");
+                                        String email = item.getString("email");
+                                        String mobile = item.getString("mobile");
+                                        JSONArray temp = item.getJSONArray("role");
+                                        String role = "[";
+                                        ArrayList<String> array = new ArrayList<String>();
+                                        for (int j = 0; j < temp.length(); j++) {
+                                            String pet = temp.getString(j);
+                                            role += pet;
+                                            if(j != temp.length()-1){
+                                                role += ",";
+                                            }
+                                            array.add(pet);
+                                        }
+                                        role += "]";
                                         table.addCell(String.valueOf((count+1)));
-                                        table.addCell(graph.get(count).get(0));
-                                        table.addCell(graph.get(count).get(1));
-                                        table.addCell(graph.get(count).get(2));
-                                        table.addCell(graph.get(count).get(3));
-                                        table.addCell(graph.get(count).get(4));                  
+                                        table.addCell(name);
+                                        table.addCell(email);
+                                        table.addCell(mobile);
+                                        table.addCell(role);
+                                        // table.addCell(graph.get(count).get(0));
+                                        // table.addCell(graph.get(count).get(1));
+                                        // table.addCell(graph.get(count).get(2));
+                                        // table.addCell(graph.get(count).get(3));
+                                        // table.addCell(graph.get(count).get(4));                  
                                     }
                                     Paragraph paragraph = new Paragraph("Librarian Data");
                                     document.add(paragraph);
@@ -407,15 +447,40 @@ public class StoreMail extends HttpServlet {
                             }
                         case "csv":
                             {
-                                String newData="S_NO,Username,First Name,Last Name,Email Id,Mobile Number\n";
-                                for (int count = 0; count < graph.size(); count++) {
-                                    newData += String.valueOf((count+1))+",";
-                                    newData += graph.get(count).get(0)+",";
-                                    newData += graph.get(count).get(1)+",";
-                                    newData += graph.get(count).get(2)+",";
-                                    newData += graph.get(count).get(3)+",";
-                                    newData += graph.get(count).get(4)+",\n";
+                                String newData="S_NO,Name,Email Id,Mobile Number,Role\n";
+                                try {
+                                    for (int i=0; i<ja.length(); i++) {
+                                        JSONObject item = ja.getJSONObject(i);
+                                        String s_no = String.valueOf((i+1));
+                                        String name = item.getString("name");
+                                        String email = item.getString("email");
+                                        String mobile = item.getString("mobile");
+                                        JSONArray temp = item.getJSONArray("role");
+                                        String role = "\"";
+                                        ArrayList<String> array = new ArrayList<String>();
+                                        for (int j = 0; j < temp.length(); j++) {
+                                            String pet = temp.getString(j);
+                                            role += pet;
+                                            if(j != temp.length()-1){
+                                                role += ",";
+                                            }
+                                            array.add(pet);
+                                        }
+                                        role += "\"";
+                                        newData = newData + s_no + "," + name + "," + email + "," + mobile + "," + role + "\n";
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
+                                // String newData="S_NO,Username,First Name,Last Name,Email Id,Mobile Number\n";
+                                // for (int count = 0; count < graph.size(); count++) {
+                                //     newData += String.valueOf((count+1))+",";
+                                //     newData += graph.get(count).get(0)+",";
+                                //     newData += graph.get(count).get(1)+",";
+                                //     newData += graph.get(count).get(2)+",";
+                                //     newData += graph.get(count).get(3)+",";
+                                //     newData += graph.get(count).get(4)+",\n";
+                                // }
                                 try (PrintWriter writer = new PrintWriter("librarian.csv")) {
                                     writer.write(newData.toString());
                                     System.out.println("done!");
@@ -430,18 +495,46 @@ public class StoreMail extends HttpServlet {
                             }
                         case "xls":
                             {
-                                String newData="<table>\n\t<tr>\n\t\t<th>S_NO.</th>\n\t\t<th>Username</th>\n\t\t<th>First Name</th>\n\t\t<th>Last Name</th>\n\t\t<th>Email Id</th>\n\t\t<th>Mobile Number</th>\n\t</tr>";
-                                for (int count = 0; count < graph.size(); count++) {
-                                    newData +="\n\t<tr>";
-                                    newData += "\n\t\t<td>"+String.valueOf((count+1))+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(0)+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(1)+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(2)+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(3)+"</td>";
-                                    newData += "\n\t\t<td>"+graph.get(count).get(4)+"</td>";
-                                    newData += "\n\t</tr>";
+                                String newData="<table>\n\t<tr>\n\t\t<th>S_NO.</th>\n\t\t<th>Name</th>\n\t\t<th>Email Id</th>\n\t\t<th>Mobile Number</th>\n\t\t<th>Role</th>\n\t</tr>";
+                                try {
+                                    for (int count = 0; count < ja.length(); count++) {
+                                        JSONObject item = ja.getJSONObject(count);
+                                        String name = item.getString("name");
+                                        String email = item.getString("email");
+                                        String mobile = item.getString("mobile");
+                                        JSONArray temp = item.getJSONArray("role");
+                                        newData +="\n\t<tr>";
+                                        newData += "\n\t\t<td >"+String.valueOf((count+1))+"</td>";
+                                        newData += "\n\t\t<td >"+name+"</td>";
+                                        newData += "\n\t\t<td >"+email+"</td>";
+                                        newData += "\n\t\t<td >"+mobile+"</td>";
+                                        newData += "\n\t\t<td >";
+                                        for (int j = 0; j < temp.length(); j++) {
+                                                String pet = temp.getString(j);
+                                                newData += pet;
+                                                if(j != temp.length()-1){
+                                                    newData += ",";
+                                                }
+                                            }
+                                        newData += "</td>";
+                                        newData += "\n\t</tr>";
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                                newData += "\n</table > ";
+                                newData += "\n</table > "; 
+                                // String newData="<table>\n\t<tr>\n\t\t<th>S_NO.</th>\n\t\t<th>Username</th>\n\t\t<th>First Name</th>\n\t\t<th>Last Name</th>\n\t\t<th>Email Id</th>\n\t\t<th>Mobile Number</th>\n\t</tr>";
+                                // for (int count = 0; count < graph.size(); count++) {
+                                //     newData +="\n\t<tr>";
+                                //     newData += "\n\t\t<td>"+String.valueOf((count+1))+"</td>";
+                                //     newData += "\n\t\t<td>"+graph.get(count).get(0)+"</td>";
+                                //     newData += "\n\t\t<td>"+graph.get(count).get(1)+"</td>";
+                                //     newData += "\n\t\t<td>"+graph.get(count).get(2)+"</td>";
+                                //     newData += "\n\t\t<td>"+graph.get(count).get(3)+"</td>";
+                                //     newData += "\n\t\t<td>"+graph.get(count).get(4)+"</td>";
+                                //     newData += "\n\t</tr>";
+                                // }
+                                // newData += "\n</table > ";
                                 try (PrintWriter writer = new PrintWriter("librarian.xls")) {
                                     writer.write(newData.toString());
                                     System.out.println("done!");
@@ -458,6 +551,7 @@ public class StoreMail extends HttpServlet {
                             break;
                     }
                 }
+                //send mail
                 try {
                     Message message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(from));

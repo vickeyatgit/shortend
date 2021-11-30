@@ -24,7 +24,7 @@ public class AdminLibDelete extends HttpServlet {
         String userName = request.getParameter("username");
 
         JSONObject resSent = new JSONObject();
-        Boolean check = db.deleteLib(userName);
+        Boolean check = db.deleteAccount(userName);
         if (check) {
             try{
                 resSent.put("result","pass");

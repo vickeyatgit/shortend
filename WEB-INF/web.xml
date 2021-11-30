@@ -425,6 +425,17 @@
     <url-pattern>/AdminCreateRole</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <description></description>
+    <display-name>GetRoleNav</display-name>
+    <servlet-name>GetRoleNav</servlet-name>
+    <servlet-class>GetRoleNav</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetRoleNav</servlet-name>
+    <url-pattern>/GetRoleNav</url-pattern>
+  </servlet-mapping>
+
 
 
 
@@ -504,7 +515,7 @@
     </security-role> -->
 
 <!-- session time out -->
-<!-- <session-config> <session-timeout>100</session-timeout> </session-config> -->
+<session-config> <session-timeout>100</session-timeout> </session-config>
 
 <!-- cors -->
   <filter>

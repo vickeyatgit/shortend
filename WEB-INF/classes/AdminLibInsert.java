@@ -32,23 +32,24 @@ public class AdminLibInsert extends HttpServlet {
         System.out.println(qu);
         PrintWriter out = response.getWriter();
         JSONArray ja = new JSONArray();
-        try{
-            ArrayList<ArrayList<String>> graph = new ArrayList<>();
-            graph = db.filterLibrarian(qu);
-            for (int count = 0; count < graph.size(); count++) {
-                JSONObject jo = new JSONObject();
-                jo.put("Username", graph.get(count).get(0));
-                jo.put("FirstName", graph.get(count).get(1));
-                jo.put("LastName", graph.get(count).get(2));
-                jo.put("Email", graph.get(count).get(3));
-                jo.put("Mobile", graph.get(count).get(4));
-                jo.put("Books", graph.get(count).get(5));
-                ja.put(jo);
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        ja = db.filterUserDataWithRole(qu);
+        // try{
+        //     ArrayList<ArrayList<String>> graph = new ArrayList<>();
+        //     graph = db.filterLibrarian(qu);
+        //     for (int count = 0; count < graph.size(); count++) {
+        //         JSONObject jo = new JSONObject();
+        //         jo.put("Username", graph.get(count).get(0));
+        //         jo.put("FirstName", graph.get(count).get(1));
+        //         jo.put("LastName", graph.get(count).get(2));
+        //         jo.put("Email", graph.get(count).get(3));
+        //         jo.put("Mobile", graph.get(count).get(4));
+        //         jo.put("Books", graph.get(count).get(5));
+        //         ja.put(jo);
+        //     }
+        // }
+        // catch(Exception e){
+        //     e.printStackTrace();
+        // }
         out.println(ja);
         
 

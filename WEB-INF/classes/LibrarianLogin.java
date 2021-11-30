@@ -41,31 +41,35 @@ public class LibrarianLogin extends HttpServlet{
     {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         PrintWriter out = response.getWriter();
-        JSONObject obj = new JSONObject();
+        // JSONObject obj = new JSONObject();
+        // String username = request.getRemoteUser();
+        // // get user role
+        // boolean isMgr = request.isUserInRole("librarian");
+        // System.out.println("isMgr chech role: " + isMgr);
+        // // to get user name
+        // java.security.Principal principal = request.getUserPrincipal();
+        // String remoteUser = principal.getName();
+        
+        // System.out.println("remoteUser: " + remoteUser);
+        // Dictionary geek = new Hashtable();
+        // geek = db.getLibrarianData(username);
+        // try {
+        //     obj.put("username",geek.get("username"));
+        //     obj.put("firstname",geek.get("firstname"));
+        //     obj.put("lastname",geek.get("lastname"));
+        //     obj.put("mobile",geek.get("mobilenumner"));
+        //     obj.put("email",geek.get("emailid"));
+        //     obj.put("tally",geek.get("bookstally"));
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
         String username = request.getRemoteUser();
-        // get user role
-        boolean isMgr = request.isUserInRole("librarian");
-        System.out.println("isMgr chech role: " + isMgr);
-        // to get user name
-        java.security.Principal principal = request.getUserPrincipal();
-        String remoteUser = principal.getName();
-        
-        System.out.println("remoteUser: " + remoteUser);
-        Dictionary geek = new Hashtable();
-        geek = db.getLibrarianData(username);
-        try {
-            obj.put("username",geek.get("username"));
-            obj.put("firstname",geek.get("firstname"));
-            obj.put("lastname",geek.get("lastname"));
-            obj.put("mobile",geek.get("mobilenumner"));
-            obj.put("email",geek.get("emailid"));
-            obj.put("tally",geek.get("bookstally"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        
-        out.print(obj);
+        System.out.println("username: " + username);
+        JSONObject item = new JSONObject();
+        item = db.getUserData(username);
+        out.print(item);
+        out.flush();
+        out.close();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
