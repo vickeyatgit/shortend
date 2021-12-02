@@ -30,10 +30,11 @@ public class Createadmin extends HttpServlet {
             String name = request.getParameter("name");
             String mobile = request.getParameter("mobile");
             String pass = request.getParameter("pass");
-            Boolean check = db.makeLoginCredentials(email, name, mobile, pass);
+            // Boolean check = db.makeLoginCredentials(email, name, mobile, pass);
+            Boolean check1 = db.createUser(email, name, mobile, pass);
             JSONObject resSent = new JSONObject();
             try {
-                resSent.put("result",check);
+                resSent.put("result",check1);
             } catch (Exception e) {
                 //TODO: handle exception
                 e.printStackTrace();

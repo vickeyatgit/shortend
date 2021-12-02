@@ -32,7 +32,8 @@ public class AdminLibInsert extends HttpServlet {
         System.out.println(qu);
         PrintWriter out = response.getWriter();
         JSONArray ja = new JSONArray();
-        ja = db.filterUserDataWithRole(qu);
+        // ja = db.filterUserDataWithRole(qu);
+        ja = db.newlistOfUserFilter(qu);
         // try{
         //     ArrayList<ArrayList<String>> graph = new ArrayList<>();
         //     graph = db.filterLibrarian(qu);

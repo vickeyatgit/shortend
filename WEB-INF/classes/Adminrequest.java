@@ -19,7 +19,8 @@ public class Adminrequest extends HttpServlet {
     response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
     PrintWriter out = response.getWriter();
     JSONArray ja = new JSONArray();
-    ja=db.listOfUnRole();
+    // ja=db.listOfUnRole();
+    ja=db.newlistOfUnRole();
     out.println(ja);
     out.flush();
     out.close();

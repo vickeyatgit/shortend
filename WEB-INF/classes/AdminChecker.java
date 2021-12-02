@@ -25,7 +25,6 @@ public class AdminChecker extends HttpServlet {
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
     PrintWriter out = response.getWriter();
-    // String op[] = db.checkLoginCredentials("mywps010@gmail.com", "PointBreak@1999");
     out.println("check");
   }
 

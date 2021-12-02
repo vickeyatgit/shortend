@@ -1,12 +1,9 @@
 
 import dbaction.Dbclass;
 import dbaction.TokenCheck;
-
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.servlet.ServletException;
-// import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,13 +18,10 @@ public class AdminCreateRole extends HttpServlet {
   Dbclass db = new Dbclass();
 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    // doPost(request, response);
+    
     response.setHeader("Access-Control-Allow-Credentials", "true");
     System.out.println("Adminauthority");
     PrintWriter out = response.getWriter();
-    // JSONArray ja = new JSONArray();
-    // ja = db.roleAndResourse();
-    // out.println(ja);
     out.close();
   }
 
@@ -46,9 +40,9 @@ public class AdminCreateRole extends HttpServlet {
       res[j] = list.get(j);
     }
 
-    Boolean result = db.createRoleAndResource(role, res);
+    Boolean result1 = db.createRole(role, res);
     JSONObject resSent = new JSONObject();
-    if (result) {
+    if (result1) {
       try{
         resSent.put("result","pass");
       }catch(Exception e){

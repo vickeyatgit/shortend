@@ -436,6 +436,28 @@
     <url-pattern>/GetRoleNav</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <description></description>
+    <display-name>CreateOrg</display-name>
+    <servlet-name>CreateOrg</servlet-name>
+    <servlet-class>CreateOrg</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateOrg</servlet-name>
+    <url-pattern>/CreateOrg</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>CheckOrgEmail</display-name>
+    <servlet-name>CheckOrgEmail</servlet-name>
+    <servlet-class>CheckOrgEmail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckOrgEmail</servlet-name>
+    <url-pattern>/CheckOrgEmail</url-pattern>
+  </servlet-mapping>
+
 
 
 

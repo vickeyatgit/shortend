@@ -916,28 +916,42 @@ public class Dbclass {
 
     //account check login credentials for all in one
     public ArrayList<String> checkLoginCredentials(String username,String password){
-        String[] carry = new String[2];
-        System.out.println("in dbaction");
-        ArrayList list=new ArrayList();
-        // Array temp;
-        String query = "SELECT * FROM account WHERE email='"+username+"' AND password='"+password+"';";
-        try {  
+        ArrayList<String> list = new ArrayList<String>();
+        String query = "SELECT * FROM role WHERE id=(SELECT roleid FROM user_role WHERE userid=(SELECT id FROM useraccount WHERE email='"+username+"' AND password='"+password+"'))";
+        try {
             Connection con = getConnection();
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery(query);
             while (result.next()) {
-                System.out.println("catch");
-                Array cities = result.getArray("role");
-                String[] str_cities = (String[])cities.getArray();
-                for (String str : str_cities) 
-                    list.add(str);
+                list.add(result.getString("rolename"));
             }
-            System.out.println("no user");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("error"+ e);
+            System.out.println(e);
         }
         return list;
+        // String[] carry = new String[2];
+        // System.out.println("in dbaction");
+        // ArrayList list=new ArrayList();
+        // // Array temp;
+        // String query = "SELECT * FROM account WHERE email='"+username+"' AND password='"+password+"';";
+        // try {  
+        //     Connection con = getConnection();
+        //     Statement state = con.createStatement();
+        //     ResultSet result = state.executeQuery(query);
+        //     while (result.next()) {
+        //         System.out.println("catch");
+        //         Array cities = result.getArray("role");
+        //         String[] str_cities = (String[])cities.getArray();
+        //         for (String str : str_cities) 
+        //             list.add(str);
+        //     }
+        //     System.out.println("no user");
+        // }catch (Exception e) {
+        //     e.printStackTrace();
+        //     System.out.println("error"+ e);
+        // }
+        // return list;
     }
 
     //create new user
@@ -1192,6 +1206,239 @@ public class Dbclass {
         }
         return list;
     }
+
+    //create user
+    public Boolean createUser(String email, String name, String mobile, String password){
+        Boolean check = false;
+        try {
+            Connection con = getConnection();
+            String query = "INSERT INTO useraccount (email,password,fullname,mobilenumber) VALUES (?,?,?,?);";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+            pstmt.setString(3, name);
+            pstmt.setString(4, mobile);
+            int affectedrows = pstmt.executeUpdate();
+            if(affectedrows>0) check=true;
+            System.out.println("new user created: ");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    // create role and resource
+    public Boolean createRole(String role, String[] res){
+        Boolean check = false;
+        String query = "INSERT INTO role (rolename) VALUES (?) RETURNING id;";
+        int roleid = 0;
+        int resourceid = 0;
+        try {
+            Connection con = getConnection();
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setString(1, role);
+            ResultSet result = pstmt.executeQuery();
+            while (result.next()) {
+                roleid = result.getInt("id");
+            }
+            if(roleid!=0){
+                query = "INSERT INTO resources (res) VALUES (?) RETURNING id;";
+                pstmt = con.prepareStatement(query);
+                pstmt.setArray(1, con.createArrayOf("text", res));
+                result = pstmt.executeQuery();
+                while (result.next()) {
+                    resourceid = result.getInt("id");
+                }
+                if(resourceid!=0){
+                    query = "INSERT INTO role_resource (roleid,resourceid) VALUES (?,?);";
+                    pstmt = con.prepareStatement(query);
+                    pstmt.setInt(1, roleid);
+                    pstmt.setInt(2, resourceid);
+                    int affectedrows = pstmt.executeUpdate();
+                    if(affectedrows>0) check=true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    // get role and resource combine
+    public JSONArray roleResourseCombine() {
+        System.out.println("enter role");
+        JSONArray ja = new JSONArray();
+        String query1 = "SELECT role.rolename,resources.res FROM role,resources,role_resource WHERE role_resource.roleid=role.id AND role_resource.resourceid=resources.id;";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query1);
+            while (result.next()) {
+                JSONObject jo = new JSONObject();
+                jo.put("role", result.getString("rolename"));
+                ArrayList list=new ArrayList();
+                Array cities = result.getArray("res");
+                String[] str_cities = (String[])cities.getArray();
+                for (String str : str_cities) 
+                    list.add(str);
+                jo.put("resources", list);
+                ja.put(jo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ja;
+    }
+
+    //get new unrole
+    public JSONArray newlistOfUnRole(){
+        JSONArray ja = new JSONArray();
+        String query = "SELECT * FROM useraccount u LEFT OUTER JOIN user_role r ON r.userid = u.id;";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            //
+            while (result.next()) {
+                int userid = result.getInt("userid");
+                if(userid == 0) {
+                    JSONObject jo = new JSONObject();
+                    jo.put("email", result.getString("email"));
+                    jo.put("fullname", result.getString("fullname"));
+                    jo.put("userid", result.getInt("id"));
+                    ja.put(jo);
+                }
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return ja;
+    }
+
+    // set new role
+    public Boolean setNewRole(String user,String[] role){
+        Boolean check = false;
+        // String query1 = "SELECT id FROM useraccount WHERE email = '"+user+"';";
+        // String query2 = "SELECT id FROM role WHERE rolename = '"+role[0]+"';";
+        String query = "INSERT INTO user_role (userid,roleid) VALUES ((SELECT id FROM useraccount WHERE email = '"+user+"'),(SELECT id FROM role WHERE rolename = '"+role[0]+"'));";
+        int userid = 0;
+        int roleid = 0;
+        try {
+            Connection con = getConnection();
+            PreparedStatement pstmt = con.prepareStatement(query);
+            int affectedrows = pstmt.executeUpdate();
+            if(affectedrows>0) check=true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    //get new user 
+    public JSONArray newlistOfUser(){
+        JSONArray ja = new JSONArray();
+        String query = "SELECT * FROM user_role,useraccount,role WHERE user_role.userid = useraccount.id AND user_role.roleid = role.id;";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                JSONObject jo = new JSONObject();
+                jo.put("email", result.getString("email"));
+                jo.put("name", result.getString("fullname"));
+                jo.put("mobile", result.getString("mobilenumber"));
+                jo.put("role", result.getString("rolename"));
+                ja.put(jo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return ja;
+    }
+
+    //get new user via filter
+    public JSONArray newlistOfUserFilter(String filter){
+        JSONArray ja = new JSONArray();
+        String query = "SELECT * FROM user_role,useraccount,role WHERE user_role.userid = useraccount.id AND user_role.roleid = role.id AND useraccount.fullname LIKE '%"+filter+"%';";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                JSONObject jo = new JSONObject();
+                jo.put("email", result.getString("email"));
+                jo.put("name", result.getString("fullname"));
+                jo.put("mobile", result.getString("mobilenumber"));
+                jo.put("role", result.getString("rolename"));
+                ja.put(jo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+    return ja;
+    }
+
+    //get role via username and password
+    public ArrayList<String> getRole(String username,String password){
+        ArrayList<String> list = new ArrayList<String>();
+        String query = "SELECT * FROM role WHERE id=(SELECT roleid FROM user_role WHERE userid=(SELECT id FROM useraccount WHERE email='"+username+"' AND password='"+password+"'))";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                list.add(result.getString("rolename"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    // get resource via role
+    public ArrayList<String> getResource(String role){
+        ArrayList<String> list = new ArrayList<String>();
+        String query = "SELECT res FROM resources WHERE id=(SELECT resourceid FROM role_resource WHERE roleid=(SELECT id FROM role WHERE rolename='"+role+"'))";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                Array resource = result.getArray("res");
+                String[] temp = (String[])resource.getArray();
+                for (String str : temp) 
+                    list.add(str);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    //get all role
+    public ArrayList<String> getAllRole(){
+        ArrayList<String> list = new ArrayList<String>();
+        String query = "SELECT * FROM role";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                list.add(result.getString("rolename"));
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return list;
+    }
+
 
     }
 

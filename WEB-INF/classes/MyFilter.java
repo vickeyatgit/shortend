@@ -29,66 +29,29 @@ public class MyFilter implements Filter{
         // String url = request1.getRequestURI();
         // System.out.println("url: " + url);
 
-
         Boolean reDirect = false;
-        // System.out.println("is admin: " + request1.isUserInRole("admin"));
-        // System.out.println("is user: " + request1.getRemoteUser());
-        // if(request1.isUserInRole("admin") && !reDirect){
-        //   String[] adminUrlContainer = {
-        //     "/shortend/AdminChecker","/shortend/GetLibrarianData","/shortend/AdminLibDelete",
-        //     "/shortend/GetFilePdf","/shortend/GetFileHtml","/shortend/GetFileReq",
-        //     "/shortend/GetFilexls","/shortend/Mailme","/shortend/StoreMail",
-        //     "/shortend/AdminLibInsert","/shortend/Logout","/shortend/Adminrequest",
-        //     "/shortend/AdminInsertRole","/shortend/Adminauthority","/shortend/AdminCreateRole",
-        //     "/shortend/GetRoleNav","/shortend/LibrarianLogin"
-        //   };  // array of strings
-        //   List<String> adminUrlList = new ArrayList<>(Arrays.asList(adminUrlContainer));
-        //   reDirect = adminUrlList.contains(url);
-        //   System.out.println("in condition in admin: " + reDirect);
-        // }
-        // else if(request1.isUserInRole("librarian") && !reDirect){
-        //   String[] librarianUrlContainer = {
-        //     "/shortend/LibrarianChecker","/shortend/LibBookInsert","/shortend/AddReader",
-        //     "/shortend/LendingData","/shortend/LibrarianLogin","/shortend/LibraryBook",
-        //     "/shortend/FilterBooks","/shortend/RemoveBooks","/shortend/LibrarianLendBook",
-        //     "/shortend/Logout","/shortend/CheckReader","/shortend/GetRoleNav"
-        //   };
-        //   List<String> libUrlList = new ArrayList<>(Arrays.asList(librarianUrlContainer));
-        //   reDirect = libUrlList.contains(url);
-        //   System.out.println("in condition in librarian: " + reDirect);
-        // }
-        // else{
-        //     // reDirect = true;
-        //     if(url.equals("/shortend/Createadmin")||url.equals("/shortend/GetRoleNav")){
-        //       reDirect = true;
-        //     }
-        // }
 
         String url = request1.getRequestURI();
         System.out.println("url: " + url);
         System.out.println("is user: " + request1.getRemoteUser());
+
         Dbclass db = new Dbclass();
-        JSONArray ja = new JSONArray();
+        
+        //get all roles
+        ArrayList<String> roles = new ArrayList<String>();
         ArrayList<String> listOfRes = new ArrayList<String>();
-        ja = db.roleAndResourse();
-        try {
-          for (int i=0; i<ja.length(); i++) {
-            JSONObject item = ja.getJSONObject(i);
-            String name = item.getString("role");
-            Boolean checkRole = request1.isUserInRole(name);
-            if(checkRole){
-              System.out.println("role: " + name);
-              JSONArray temp = item.getJSONArray("resources");
-              for (int j = 0; j < temp.length(); j++) {
-                String pet = temp.getString(j);
-                listOfRes.add(pet);
-                // System.out.println(i+j + pet);
-              }
-            }                
+        roles = db.getAllRole();
+        for(int i=0; i<roles.size(); i++){
+            System.out.println("role: " + roles.get(i));
+            Boolean isRole = (Boolean) request1.isUserInRole(roles.get(i));
+            if(isRole){
+                System.out.println("isRole: " + roles.get(i));
+                listOfRes = db.getResource(roles.get(i));
+                break;
             }
-        } catch (Exception e) {
-          e.printStackTrace();
         }
+        
+        
         for(String d: listOfRes){
           System.out.println("listOfRes: " + d);
         }
@@ -181,11 +144,15 @@ public class MyFilter implements Filter{
         }
 
         if(!reDirect){
-          if(url.equals("/shortend/Createadmin")||url.equals("/shortend/GetRoleNav")||url.equals("/shortend/Logout")){
+          if(url.equals("/shortend/Createadmin")||
+          url.equals("/shortend/GetRoleNav")||
+          url.equals("/shortend/Logout")  ||
+          url.equals("/shortend/CreateOrg") ||
+          url.equals("/shortend/CheckOrgEmail") 
+          ){
             reDirect = true;
           }
         }
-
 
 
         if(reDirect){

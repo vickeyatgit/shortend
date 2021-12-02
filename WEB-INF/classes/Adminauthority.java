@@ -23,7 +23,8 @@ public class Adminauthority extends HttpServlet {
     System.out.println("Adminauthority");
     PrintWriter out = response.getWriter();
     JSONArray ja = new JSONArray();
-    ja = db.roleAndResourse();
+    // ja = db.roleAndResourse();
+    ja = db.roleResourseCombine();
     out.println(ja);
     out.close();
   }
@@ -45,8 +46,7 @@ public class Adminauthority extends HttpServlet {
       rol[j] = list1.get(j);
     }
 
-
-    result = db.insertRoleToUser(user,rol);
+    result = db.setNewRole(user,rol);
     JSONObject resSent = new JSONObject();
     if (result) {
       try{

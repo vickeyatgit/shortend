@@ -18,7 +18,8 @@ public class GetLibrarianData extends HttpServlet {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         PrintWriter out = response.getWriter();
         JSONArray ja = new JSONArray();
-        ja = db.getUserDateWithRole();
+        // ja = db.getUserDateWithRole();
+        ja = db.newlistOfUser();
         // try{
         //     ArrayList<ArrayList<String>> graph = new ArrayList<>();
         //     graph = db.librarianGetList();
