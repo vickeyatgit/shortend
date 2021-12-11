@@ -1,6 +1,5 @@
 
 import dbaction.Dbclass;
-import dbaction.TokenCheck;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -17,36 +16,33 @@ public class Adminauthority extends HttpServlet {
   private static final long serialVersionUID = 1L;
   Dbclass db = new Dbclass();
 
+  //get role and resource of all user
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    // doPost(request, response);
     response.setHeader("Access-Control-Allow-Credentials", "true");
-    System.out.println("Adminauthority");
     PrintWriter out = response.getWriter();
     JSONArray ja = new JSONArray();
-    // ja = db.roleAndResourse();
-    ja = db.roleResourseCombine();
+    int businessId = db.getBusinessId(request.getRemoteUser());
+    System.out.println("businessId: " + businessId);
+    ja = db.roleResourseCombine(businessId);
     out.println(ja);
     out.close();
   }
 
 
+  //insert user and role
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     response.setHeader("Access-Control-Allow-Credentials", "true");
-    System.out.println("Adminauthority");
     PrintWriter out = response.getWriter();
-
     Boolean result = false;
-
     String user = request.getParameter("username");
     String role = request.getParameter("role");
-
     ArrayList<String> list1 = new ArrayList<>(Arrays.asList(role.split(",")));
     String rol[] = new String[list1.size()];
     for (int j = 0; j < list1.size(); j++) {
       rol[j] = list1.get(j);
     }
-
-    result = db.setNewRole(user,rol);
+    int businessId = db.getBusinessId(request.getRemoteUser());
+    result = db.setNewRole(user,rol,businessId);
     JSONObject resSent = new JSONObject();
     if (result) {
       try{

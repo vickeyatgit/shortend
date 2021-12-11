@@ -13,27 +13,19 @@ public class Adminrequest extends HttpServlet {
 
   Dbclass db = new Dbclass();
 
+  //get list of user without role assigned
   protected void doGet(HttpServletRequest request, HttpServletResponse response) 
   throws ServletException, IOException {
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
     PrintWriter out = response.getWriter();
     JSONArray ja = new JSONArray();
-    // ja=db.listOfUnRole();
-    ja=db.newlistOfUnRole();
+    int businessId = db.getBusinessId(request.getRemoteUser());
+    ja=db.newlistOfUnRole(businessId);
     out.println(ja);
     out.flush();
     out.close();
 
 	}
-
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-  throws ServletException, IOException {
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-    PrintWriter out = response.getWriter();
-    // String op[] = db.checkLoginCredentials("mywps010@gmail.com", "PointBreak@1999");
-    // out.println("check");
-  }
 
 }

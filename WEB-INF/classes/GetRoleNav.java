@@ -11,6 +11,7 @@ import dbaction.Dbclass;
 
 public class GetRoleNav extends HttpServlet {
 
+  //get role and resource of particular user
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
     throws ServletException, IOException {
         Dbclass db = new Dbclass();
@@ -19,44 +20,38 @@ public class GetRoleNav extends HttpServlet {
         ArrayList<String> roles = new ArrayList<String>();
         ArrayList<String> listOfRes = new ArrayList<String>();
         String role = "";
-        roles = db.getAllRole();
-        for(int i=0; i<roles.size(); i++){
+        System.out.println("in get role nav");
+        System.out.println((Boolean) request.isUserInRole("owner"));
+        if((Boolean) request.isUserInRole("owner")){
+          listOfRes = db.getResource("owner",0);
+          role = "owner";
+          for(String res : listOfRes){
+            System.out.println(res);
+          }
+        }
+        else{
+          int businessId = db.getBusinessId(request.getRemoteUser());
+          roles = db.getAllRole(businessId);
+          for(int i=0; i<roles.size(); i++){
             System.out.println("role: " + roles.get(i));
             Boolean isRole = (Boolean) request.isUserInRole(roles.get(i));
             if(isRole){
                 role = roles.get(i);
                 System.out.println("isRole: " + roles.get(i));
-                listOfRes = db.getResource(roles.get(i));
+                listOfRes = db.getResource(roles.get(i),businessId);
                 break;
             }
+          }
         }
 
         PrintWriter out = response.getWriter();
-        // JSONArray ja = new JSONArray();
         JSONObject result = new JSONObject();
         System.out.println("GetRoleNav=>"+request.getRemoteUser());
-        // ja = db.roleAndResourse();
         try {
           if(role.length()>0){
             result.put("role", role);
             result.put("resources", listOfRes);
           }
-          // for (int i=0; i<ja.length(); i++) {
-          //   JSONObject item = ja.getJSONObject(i);
-          //   String name = item.getString("role");
-          //   Boolean checkRole = request.isUserInRole(name);
-          //   if(checkRole){
-          //     System.out.println(name);
-          //     result.put("role", name);
-          //     result.put("resources", item.getJSONArray("resources"));
-          //     // JSONArray temp = item.getJSONArray("resources");
-          //     // System.out.println(temp.length());
-          //     // for (int j = 0; j < temp.length(); j++) {
-          //     //   String pet = temp.getString(j);
-          //     //   System.out.println(i+j + pet);
-          //     // }
-          //   }                
-          //   }
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -64,11 +59,3 @@ public class GetRoleNav extends HttpServlet {
         out.flush();
     }
 }
-/*
-ArrayList<String> list = new ArrayList<String>();
-list = db.getResource(role);
-JSONArray ja = new JSONArray();
-ja.put("role", role);
-ja.put("resources", list);
-
-*/ 

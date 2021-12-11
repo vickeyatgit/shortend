@@ -10,7 +10,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import dbaction.Dbclass;
 
-public class GetLibrarianData extends HttpServlet {
+public class GetUserProfile extends HttpServlet {
 
     // get user data
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -18,10 +18,8 @@ public class GetLibrarianData extends HttpServlet {
         Dbclass db = new Dbclass();
         response.setHeader("Access-Control-Allow-Credentials", "true");
         PrintWriter out = response.getWriter();
-        JSONArray ja = new JSONArray();
-        String username = request.getRemoteUser();
-        int businessId = db.getBusinessId(username);
-        ja = db.newlistOfUser(businessId,username);
+        JSONObject ja = new JSONObject();
+        ja = db.getUserProfile(request.getRemoteUser());
         out.println(ja);
         out.flush();
     }

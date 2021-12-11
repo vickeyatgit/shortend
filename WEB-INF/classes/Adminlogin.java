@@ -3,7 +3,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
-// import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,18 +23,17 @@ import dbaction.RolePrincipal;
 import dbaction.UserPrincipal;
 import java.util.Base64;
 import java.util.Random;
-import dbaction.TokenCheck;
 import java.util.*;
 
 public class Adminlogin extends HttpServlet {
 	
 	Dbclass db = new Dbclass();
-	TokenCheck ck = new TokenCheck();
 	String role,user,pass;
 	LoginContext loginContext = null;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		PrintWriter out = response.getWriter();
+		out.println("ji");
 	}
 
 	
@@ -62,72 +60,7 @@ public class Adminlogin extends HttpServlet {
 		catch (LoginException e) {
 			e.printStackTrace();
 			authCheck = false;
-		}
-		// /////////////////
-		// if (role == null) {
-    //         role = "nothing";
-    //     }
-    //     System.out.println("result "+authCheck);
-		
-		// String encodedString = "";
-		// Boolean sessionCheck = false;
-		// if(authCheck){
-		// 	Random random = new Random();
-		// 	String setOfCharacters = "a1b2c3d4e5f6g7h8i9j0k0l!m@n#o$p%q^r&s*t(u=v-w+x/y*z";
-		// 	String key="";
-		// 	for(int j=0;j<2;j++){
-		// 		for(int i=0;i<(random.nextInt(20-10) + 10);i++){
-		// 			int randomInt = random.nextInt(setOfCharacters.length());
-		// 			key += setOfCharacters.charAt(randomInt);
-		// 		}
-		// 		if(j==2) break;
-		// 		key += username;
-		// 	}
-		// 	key +=fingerprint;
-		// 	System.out.println("key");
-		// 	System.out.println(key);
-		// 	Base64.Encoder simpleEncoder = Base64.getEncoder();
-		// 	encodedString = simpleEncoder.encodeToString(key.getBytes());
-		// 	sessionCheck = db.sessionReg(fingerprint,key,username,role);
-		// }
-    // if (authCheck && role.equals("admin") && sessionCheck) {
-		// 	JSONObject nowSent = new JSONObject();
-		// 	try {
-		// 			nowSent.put("token",encodedString);
-		// 			nowSent.put("auth",true);
-		// 			nowSent.put("role","admin");
-		// 		} catch (Exception e) {
-		// 			e.printStackTrace();
-		// 		}
-		// 	out.println(nowSent);
-		// 	out.flush();
-		// }
-		// else if (authCheck && role.equals("librarian") && sessionCheck){
-		// 	JSONObject nowSent = new JSONObject();
-		// 	try {
-		// 			nowSent.put("token",encodedString);
-		// 			nowSent.put("auth",true);	
-		// 			nowSent.put("role","librarian"); 
-		// 		} catch (Exception e) {
-		// 			e.printStackTrace();
-		// 		}
-			
-		// 	out.println(nowSent);
-		// 	out.flush();
-		// }
-		// else {
-		// 	JSONObject nowSent = new JSONObject();
-		// 	try {
-		// 			nowSent.put("auth",false);
-		// 			nowSent.put("userProfile","null");
-		// 			nowSent.put("role","null");
-		// 		} catch (Exception e) {
-		// 			e.printStackTrace();
-		// 		}
-		// 	out.println(nowSent);
-		// 	out.flush();
-		// } 
-		///////////////      //  
+		}  
 		out.println(authCheck);
 		out.flush();
 	}

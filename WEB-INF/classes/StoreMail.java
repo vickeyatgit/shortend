@@ -106,7 +106,6 @@ public class StoreMail extends HttpServlet {
             Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        // return new PasswordAuthentication("mywps010@gmail.com", "PointBreak@1999");
                         return new PasswordAuthentication(from, pass);
                     }
                 });

@@ -1,32 +1,25 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
-// import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.servlet.http.HttpSession;
-
 import dbaction.Dbclass;
-
 import javax.servlet.RequestDispatcher;
 import java.io.PrintWriter;
-
 import javax.servlet.*;
-// import org.json.*;
 import java.io.*;
 import org.json.*;
 
 public class GetFileHtml extends HttpServlet {
+    // download html file
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
                 response.setContentType("text/plain");
                 response.setHeader("Content-Disposition", "attachment; filename=\"librariabView.html\"");
                 String newData="<table style='border: 1px solid black;'>\n\t<tr>\n\t\t<th style='border: 1px solid black;'>S_NO.</th>\n\t\t<th style='border: 1px solid black;'>Name</th>\n\t\t<th style='border: 1px solid black;'>Email Id</th>\n\t\t<th style='border: 1px solid black;'>Mobile Number</th>\n\t\t<th style='border: 1px solid black;'>Role</th>\n\t</tr>";
                 Dbclass db = new Dbclass();
-                ArrayList<ArrayList<String>> graph = new ArrayList<>();
-                // graph = db.librarianGetList();
                 JSONArray ja = new JSONArray();
                 ja = db.getUserDateWithRole();
                 try {
@@ -53,20 +46,8 @@ public class GetFileHtml extends HttpServlet {
                         newData += "\n\t</tr>";
                     }
                 } catch (Exception e) {
-                    //TODO: handle exception
                     e.printStackTrace();
                 }
-                
-                // for (int count = 0; count < graph.size(); count++) {
-                //     newData +="\n\t<tr>";
-                //     newData += "\n\t\t<td>"+String.valueOf((count+1))+"</td>";
-                //     newData += "\n\t\t<td>"+graph.get(count).get(0)+"</td>";
-                //     newData += "\n\t\t<td>"+graph.get(count).get(1)+"</td>";
-                //     newData += "\n\t\t<td>"+graph.get(count).get(2)+"</td>";
-                //     newData += "\n\t\t<td>"+graph.get(count).get(3)+"</td>";
-                //     newData += "\n\t\t<td>"+graph.get(count).get(4)+"</td>";
-                //     newData += "\n\t</tr>";
-                // }
                 newData += "\n</table > "; 
                 try {
                     OutputStream outputStream = response.getOutputStream();

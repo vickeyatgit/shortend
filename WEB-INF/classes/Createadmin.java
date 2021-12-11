@@ -16,12 +16,8 @@ import org.json.*;
 public class Createadmin extends HttpServlet {
     static Boolean check;
     Dbclass db = new Dbclass();
-
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    }
 	
+    // create user
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             
@@ -30,13 +26,12 @@ public class Createadmin extends HttpServlet {
             String name = request.getParameter("name");
             String mobile = request.getParameter("mobile");
             String pass = request.getParameter("pass");
-            // Boolean check = db.makeLoginCredentials(email, name, mobile, pass);
-            Boolean check1 = db.createUser(email, name, mobile, pass);
+            String org = request.getParameter("org");
+            Boolean check = db.createUser(email, name, mobile, pass,org);
             JSONObject resSent = new JSONObject();
             try {
-                resSent.put("result",check1);
+                resSent.put("result",check);
             } catch (Exception e) {
-                //TODO: handle exception
                 e.printStackTrace();
             }
             out.println(resSent);

@@ -13,6 +13,7 @@ public class LibrarianLendBook extends HttpServlet {
 
     Dbclass db = new Dbclass();
 
+    // lend books to reader
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -21,12 +22,12 @@ public class LibrarianLendBook extends HttpServlet {
         String check="Try Again SomeTime";
         PrintWriter out = response.getWriter();
         try {
-            check = db.lendBook(bookId, UserName);
+            String names = request.getRemoteUser();
+            int businessId = db.getBusinessId(names);
+            check = db.lendBook(bookId, UserName, businessId);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-
         out.println(check);
 		out.flush();
     }

@@ -1,20 +1,14 @@
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.servlet.ServletException;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.servlet.http.HttpSession;
-
 import dbaction.Dbclass;
-
 import javax.servlet.RequestDispatcher;
 import java.io.PrintWriter;
-
 import javax.servlet.*;
 import org.json.*;
 
@@ -22,6 +16,7 @@ public class FilterBooks extends HttpServlet {
 
     Dbclass db = new Dbclass();
 
+    // filter books
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -31,15 +26,11 @@ public class FilterBooks extends HttpServlet {
         String auth = request.getParameter("auth");
         String avai = request.getParameter("avai");
         JSONArray ja = new JSONArray();
-        ja = db.filterBooks(title, lang, auth, cat, avai);
-        System.out.println("==================");
-        System.out.println(title);
-        System.out.println(lang);
-        System.out.println(cat);
-        System.out.println(auth);
-        System.out.println(avai);
-        System.out.println("==================");
+        String names = request.getRemoteUser();
+        int businessId = db.getBusinessId(names);
+        ja = db.filterBooks(title, lang, auth, cat, avai,businessId);
         PrintWriter out = response.getWriter();
         out.println(ja);
+        out.close();
     }
 }

@@ -9,12 +9,12 @@ import dbaction.Dbclass;
 import javax.servlet.RequestDispatcher;
 import java.io.PrintWriter;
 import javax.servlet.*;
-import dbaction.TokenCheck;
 import org.json.*; 
 
 public class AddReader extends HttpServlet {
     Dbclass db = new Dbclass();
-    TokenCheck ck = new TokenCheck();
+
+    //insert reader username and fullname
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -24,7 +24,9 @@ public class AddReader extends HttpServlet {
         String name = request.getParameter("name");
         JSONObject resSent = new JSONObject();
         Boolean authCheck = false;
-        authCheck = db.addReader(username, name);
+        String names = request.getRemoteUser();
+        int businessId = db.getBusinessId(names);
+        authCheck = db.addReader(username, name, businessId);
         if (authCheck) {
             try{
                 resSent.put("result","Reader is Added");

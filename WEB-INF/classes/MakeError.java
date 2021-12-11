@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class MakeError extends HttpServlet {
 
+    // error notifier
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
     throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Credentials", "true");

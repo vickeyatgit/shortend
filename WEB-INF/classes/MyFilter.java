@@ -10,7 +10,8 @@ import org.json.*;
 import dbaction.Dbclass;
 import java.util.ArrayList;
 
-public class MyFilter implements Filter{  
+public class MyFilter implements Filter{ 
+   
     public void init(FilterConfig filterConfig) throws ServletException {  
         System.out.println("MyFilter: init()");  
     }  
@@ -30,26 +31,37 @@ public class MyFilter implements Filter{
         // System.out.println("url: " + url);
 
         Boolean reDirect = false;
-
         String url = request1.getRequestURI();
         System.out.println("url: " + url);
         System.out.println("is user: " + request1.getRemoteUser());
 
         Dbclass db = new Dbclass();
-        
+
         //get all roles
         ArrayList<String> roles = new ArrayList<String>();
         ArrayList<String> listOfRes = new ArrayList<String>();
-        roles = db.getAllRole();
-        for(int i=0; i<roles.size(); i++){
+
+
+        // owner ship
+        if((Boolean) request1.isUserInRole("owner")){
+          listOfRes = db.getResource("owner",0);
+        }else{
+          int businessId = db.getBusinessId(request1.getRemoteUser());
+          roles = db.getAllRole(businessId);
+          for(int i=0; i<roles.size(); i++){
             System.out.println("role: " + roles.get(i));
             Boolean isRole = (Boolean) request1.isUserInRole(roles.get(i));
             if(isRole){
                 System.out.println("isRole: " + roles.get(i));
-                listOfRes = db.getResource(roles.get(i));
+                listOfRes = db.getResource(roles.get(i),businessId);
                 break;
             }
-        }
+          }
+        }      
+        
+        
+        
+        
         
         
         for(String d: listOfRes){
@@ -137,7 +149,7 @@ public class MyFilter implements Filter{
         System.out.println("reDirect: " + reDirect);
         if(listOfRes.contains("viewprofile") && !reDirect){
           String[] tempUrl = {
-            "/shortend/LibrarianLogin",
+            "/shortend/GetUserProfile",
           };
           List<String> tempUrlList = new ArrayList<>(Arrays.asList(tempUrl));
           reDirect = tempUrlList.contains(url);

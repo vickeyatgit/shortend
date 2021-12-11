@@ -8,117 +8,18 @@
 
   <!-- class dir -->
   <servlet>
-    <description></description>
-    <display-name>Adminlogin</display-name>
-    <servlet-name>Adminlogin</servlet-name>
-    <servlet-class>Adminlogin</servlet-class>
+    <description>get role and resources</description>
+    <display-name>GetRoleNav</display-name>
+    <servlet-name>GetRoleNav</servlet-name>
+    <servlet-class>GetRoleNav</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>Adminlogin</servlet-name>
-    <url-pattern>/Adminlogin</url-pattern>
+    <servlet-name>GetRoleNav</servlet-name>
+    <url-pattern>/GetRoleNav</url-pattern>
   </servlet-mapping>
 
   <servlet>
-    <description></description>
-    <display-name>Createadmin</display-name>
-    <servlet-name>Createadmin</servlet-name>
-    <servlet-class>Createadmin</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Createadmin</servlet-name>
-    <url-pattern>/Createadmin</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>AdminLibInsert</display-name>
-    <servlet-name>AdminLibInsert</servlet-name>
-    <servlet-class>AdminLibInsert</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AdminLibInsert</servlet-name>
-    <url-pattern>/AdminLibInsert</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>AdminLibDelete</display-name>
-    <servlet-name>AdminLibDelete</servlet-name>
-    <servlet-class>AdminLibDelete</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AdminLibDelete</servlet-name>
-    <url-pattern>/AdminLibDelete</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>AdminLogout</display-name>
-    <servlet-name>AdminLogout</servlet-name>
-    <servlet-class>AdminLogout</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AdminLogout</servlet-name>
-    <url-pattern>/AdminLogout</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>LibrarianLogin</display-name>
-    <servlet-name>LibrarianLogin</servlet-name>
-    <servlet-class>LibrarianLogin</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LibrarianLogin</servlet-name>
-    <url-pattern>/LibrarianLogin</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>LibBookInsert</display-name>
-    <servlet-name>LibBookInsert</servlet-name>
-    <servlet-class>LibBookInsert</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LibBookInsert</servlet-name>
-    <url-pattern>/LibBookInsert</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>LibraryBook</display-name>
-    <servlet-name>LibraryBook</servlet-name>
-    <servlet-class>LibraryBook</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LibraryBook</servlet-name>
-    <url-pattern>/LibraryBook</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <description></description>
-    <display-name>LibrarianLogout</display-name>
-    <servlet-name>LibrarianLogout</servlet-name>
-    <servlet-class>LibrarianLogout</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LibrarianLogout</servlet-name>
-    <url-pattern>/LibrarianLogout</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>CheckReader</display-name>
-    <servlet-name>CheckReader</servlet-name>
-    <servlet-class>CheckReader</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CheckReader</servlet-name>
-    <url-pattern>/CheckReader</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
+    <description>create readers details</description>
     <display-name>AddReader</display-name>
     <servlet-name>AddReader</servlet-name>
     <servlet-class>AddReader</servlet-class>
@@ -126,281 +27,6 @@
   <servlet-mapping>
     <servlet-name>AddReader</servlet-name>
     <url-pattern>/AddReader</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>LibrarianLendBook</display-name>
-    <servlet-name>LibrarianLendBook</servlet-name>
-    <servlet-class>LibrarianLendBook</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LibrarianLendBook</servlet-name>
-    <url-pattern>/LibrarianLendBook</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>RemoveBooks</display-name>
-    <servlet-name>RemoveBooks</servlet-name>
-    <servlet-class>RemoveBooks</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>RemoveBooks</servlet-name>
-    <url-pattern>/RemoveBooks</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>FilterBooks</display-name>
-    <servlet-name>FilterBooks</servlet-name>
-    <servlet-class>FilterBooks</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>FilterBooks</servlet-name>
-    <url-pattern>/FilterBooks</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>ReadersData</display-name>
-    <servlet-name>ReadersData</servlet-name>
-    <servlet-class>ReadersData</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ReadersData</servlet-name>
-    <url-pattern>/ReadersData</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>Dashboard</display-name>
-    <servlet-name>Dashboard</servlet-name>
-    <servlet-class>Dashboard</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Dashboard</servlet-name>
-    <url-pattern>/Dashboard</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>LendingData</display-name>
-    <servlet-name>LendingData</servlet-name>
-    <servlet-class>LendingData</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LendingData</servlet-name>
-    <url-pattern>/LendingData</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <description></description>
-    <display-name>GetLibrarianData</display-name>
-    <servlet-name>GetLibrarianData</servlet-name>
-    <servlet-class>GetLibrarianData</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>GetLibrarianData</servlet-name>
-    <url-pattern>/GetLibrarianData</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <description></description>
-    <display-name>Logout</display-name>
-    <servlet-name>Logout</servlet-name>
-    <servlet-class>Logout</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Logout</servlet-name>
-    <url-pattern>/Logout</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>myalltempchecks</display-name>
-    <servlet-name>myalltempchecks</servlet-name>
-    <servlet-class>myalltempchecks</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>myalltempchecks</servlet-name>
-    <url-pattern>/myalltempchecks</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>GetFileReq</display-name>
-    <servlet-name>GetFileReq</servlet-name>
-    <servlet-class>GetFileReq</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>GetFileReq</servlet-name>
-    <url-pattern>/GetFileReq</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>GetFilePdf</display-name>
-    <servlet-name>GetFilePdf</servlet-name>
-    <servlet-class>GetFilePdf</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>GetFilePdf</servlet-name>
-    <url-pattern>/GetFilePdf</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>GetFilexls</display-name>
-    <servlet-name>GetFilexls</servlet-name>
-    <servlet-class>GetFilexls</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>GetFilexls</servlet-name>
-    <url-pattern>/GetFilexls</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>GetFileHtml</display-name>
-    <servlet-name>GetFileHtml</servlet-name>
-    <servlet-class>GetFileHtml</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>GetFileHtml</servlet-name>
-    <url-pattern>/GetFileHtml</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <description></description>
-    <display-name>SendMail</display-name>
-    <servlet-name>SendMail</servlet-name>
-    <servlet-class>SendMail</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>SendMail</servlet-name>
-    <url-pattern>/SendMail</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <description></description>
-    <display-name>StoreMail</display-name>
-    <servlet-name>StoreMail</servlet-name>
-    <servlet-class>StoreMail</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>StoreMail</servlet-name>
-    <url-pattern>/StoreMail</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>UserChecker</display-name>
-    <servlet-name>UserChecker</servlet-name>
-    <servlet-class>UserChecker</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>UserChecker</servlet-name>
-    <url-pattern>/UserChecker</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <description></description>
-    <display-name>AutoMail</display-name>
-    <servlet-name>AutoMail</servlet-name>
-    <servlet-class>AutoMail</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AutoMail</servlet-name>
-    <url-pattern>/AutoMail</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <description></description>
-    <display-name>AdminChecker</display-name>
-    <servlet-name>AdminChecker</servlet-name>
-    <servlet-class>AdminChecker</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AdminChecker</servlet-name>
-    <url-pattern>/AdminChecker</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>LibrarianChecker</display-name>
-    <servlet-name>LibrarianChecker</servlet-name>
-    <servlet-class>LibrarianChecker</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LibrarianChecker</servlet-name>
-    <url-pattern>/LibrarianChecker</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>MakeError</display-name>
-    <servlet-name>MakeError</servlet-name>
-    <servlet-class>MakeError</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>MakeError</servlet-name>
-    <url-pattern>/MakeError</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>MakeLogin</display-name>
-    <servlet-name>MakeLogin</servlet-name>
-    <servlet-class>MakeLogin</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>MakeLogin</servlet-name>
-    <url-pattern>/MakeLogin</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>Mailme</display-name>
-    <servlet-name>Mailme</servlet-name>
-    <servlet-class>Mailme</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Mailme</servlet-name>
-    <url-pattern>/Mailme</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>Getsession</display-name>
-    <servlet-name>Getsession</servlet-name>
-    <servlet-class>Getsession</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Getsession</servlet-name>
-    <url-pattern>/Getsession</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>Adminrequest</display-name>
-    <servlet-name>Adminrequest</servlet-name>
-    <servlet-class>Adminrequest</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Adminrequest</servlet-name>
-    <url-pattern>/Adminrequest</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <description></description>
-    <display-name>AdminInsertRole</display-name>
-    <servlet-name>AdminInsertRole</servlet-name>
-    <servlet-class>AdminInsertRole</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AdminInsertRole</servlet-name>
-    <url-pattern>/AdminInsertRole</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -427,13 +53,79 @@
 
   <servlet>
     <description></description>
-    <display-name>GetRoleNav</display-name>
-    <servlet-name>GetRoleNav</servlet-name>
-    <servlet-class>GetRoleNav</servlet-class>
+    <display-name>AdminLibDelete</display-name>
+    <servlet-name>AdminLibDelete</servlet-name>
+    <servlet-class>AdminLibDelete</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>GetRoleNav</servlet-name>
-    <url-pattern>/GetRoleNav</url-pattern>
+    <servlet-name>AdminLibDelete</servlet-name>
+    <url-pattern>/AdminLibDelete</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>AdminLibInsert</display-name>
+    <servlet-name>AdminLibInsert</servlet-name>
+    <servlet-class>AdminLibInsert</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminLibInsert</servlet-name>
+    <url-pattern>/AdminLibInsert</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>Adminlogin</display-name>
+    <servlet-name>Adminlogin</servlet-name>
+    <servlet-class>Adminlogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Adminlogin</servlet-name>
+    <url-pattern>/Adminlogin</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>Adminrequest</display-name>
+    <servlet-name>Adminrequest</servlet-name>
+    <servlet-class>Adminrequest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Adminrequest</servlet-name>
+    <url-pattern>/Adminrequest</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>CheckOrgEmail</display-name>
+    <servlet-name>CheckOrgEmail</servlet-name>
+    <servlet-class>CheckOrgEmail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckOrgEmail</servlet-name>
+    <url-pattern>/CheckOrgEmail</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>CheckReader</display-name>
+    <servlet-name>CheckReader</servlet-name>
+    <servlet-class>CheckReader</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckReader</servlet-name>
+    <url-pattern>/CheckReader</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description>create user like admin,librarian</description>
+    <display-name>Createadmin</display-name>
+    <servlet-name>Createadmin</servlet-name>
+    <servlet-class>Createadmin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Createadmin</servlet-name>
+    <url-pattern>/Createadmin</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -446,64 +138,224 @@
     <servlet-name>CreateOrg</servlet-name>
     <url-pattern>/CreateOrg</url-pattern>
   </servlet-mapping>
+
+
+
+  <servlet>
+    <description></description>
+    <display-name>FilterBooks</display-name>
+    <servlet-name>FilterBooks</servlet-name>
+    <servlet-class>FilterBooks</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FilterBooks</servlet-name>
+    <url-pattern>/FilterBooks</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description>get HTML file</description>
+    <display-name>GetFileHtml</display-name>
+    <servlet-name>GetFileHtml</servlet-name>
+    <servlet-class>GetFileHtml</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetFileHtml</servlet-name>
+    <url-pattern>/GetFileHtml</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>GetFilePdf</display-name>
+    <servlet-name>GetFilePdf</servlet-name>
+    <servlet-class>GetFilePdf</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetFilePdf</servlet-name>
+    <url-pattern>/GetFilePdf</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>GetFileReq</display-name>
+    <servlet-name>GetFileReq</servlet-name>
+    <servlet-class>GetFileReq</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetFileReq</servlet-name>
+    <url-pattern>/GetFileReq</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>GetFilexls</display-name>
+    <servlet-name>GetFilexls</servlet-name>
+    <servlet-class>GetFilexls</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetFilexls</servlet-name>
+    <url-pattern>/GetFilexls</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>GetLibrarianData</display-name>
+    <servlet-name>GetLibrarianData</servlet-name>
+    <servlet-class>GetLibrarianData</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetLibrarianData</servlet-name>
+    <url-pattern>/GetLibrarianData</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>Getsession</display-name>
+    <servlet-name>Getsession</servlet-name>
+    <servlet-class>Getsession</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Getsession</servlet-name>
+    <url-pattern>/Getsession</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LendingData</display-name>
+    <servlet-name>LendingData</servlet-name>
+    <servlet-class>LendingData</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LendingData</servlet-name>
+    <url-pattern>/LendingData</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LibBookInsert</display-name>
+    <servlet-name>LibBookInsert</servlet-name>
+    <servlet-class>LibBookInsert</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibBookInsert</servlet-name>
+    <url-pattern>/LibBookInsert</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LibrarianLendBook</display-name>
+    <servlet-name>LibrarianLendBook</servlet-name>
+    <servlet-class>LibrarianLendBook</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibrarianLendBook</servlet-name>
+    <url-pattern>/LibrarianLendBook</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LibraryBook</display-name>
+    <servlet-name>LibraryBook</servlet-name>
+    <servlet-class>LibraryBook</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibraryBook</servlet-name>
+    <url-pattern>/LibraryBook</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description>respond error</description>
+    <display-name>MakeError</display-name>
+    <servlet-name>MakeError</servlet-name>
+    <servlet-class>MakeError</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MakeError</servlet-name>
+    <url-pattern>/MakeError</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description>response login</description>
+    <display-name>MakeLogin</display-name>
+    <servlet-name>MakeLogin</servlet-name>
+    <servlet-class>MakeLogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MakeLogin</servlet-name>
+    <url-pattern>/MakeLogin</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>StoreMail</display-name>
+    <servlet-name>StoreMail</servlet-name>
+    <servlet-class>StoreMail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StoreMail</servlet-name>
+    <url-pattern>/StoreMail</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>RemoveBooks</display-name>
+    <servlet-name>RemoveBooks</servlet-name>
+    <servlet-class>RemoveBooks</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoveBooks</servlet-name>
+    <url-pattern>/RemoveBooks</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>Logout</display-name>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>Logout</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/Logout</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>AutoMail</display-name>
+    <servlet-name>AutoMail</servlet-name>
+    <servlet-class>AutoMail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AutoMail</servlet-name>
+    <url-pattern>/AutoMail</url-pattern>
+  </servlet-mapping>
   
   <servlet>
     <description></description>
-    <display-name>CheckOrgEmail</display-name>
-    <servlet-name>CheckOrgEmail</servlet-name>
-    <servlet-class>CheckOrgEmail</servlet-class>
+    <display-name>GetUserProfile</display-name>
+    <servlet-name>GetUserProfile</servlet-name>
+    <servlet-class>GetUserProfile</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>CheckOrgEmail</servlet-name>
-    <url-pattern>/CheckOrgEmail</url-pattern>
+    <servlet-name>GetUserProfile</servlet-name>
+    <url-pattern>/GetUserProfile</url-pattern>
   </servlet-mapping>
 
+<!-- not check -->
 
 
 
-<!--Defines Security Constraint -->
-  <!-- <security-constraint>
-      <display-name>JSP Demo Constraint</display-name>
-      <web-resource-collection>
-        <web-resource-name>default</web-resource-name>
-        <description>only admin handles routes</description>
-        <url-pattern>/AdminChecker</url-pattern>
-        <url-pattern>/GetLibrarianData</url-pattern>
-        <url-pattern>/AdminLibDelete</url-pattern>
-        <url-pattern>/GetFilePdf</url-pattern>
-        <url-pattern>/GetFileHtml</url-pattern>
-        <url-pattern>/GetFileReq</url-pattern>
-        <url-pattern>/GetFilexls</url-pattern>
-        <url-pattern>/Mailme</url-pattern>
-        <url-pattern>/StoreMail</url-pattern>
-      </web-resource-collection>
-      <auth-constraint>
-        <description/>
-        <role-name>admin</role-name>
-      </auth-constraint>
-  </security-constraint> -->
 
-  <!-- <security-constraint>
-      <display-name>JSP Demo Constraints</display-name>
-      <web-resource-collection>
-        <web-resource-name>default</web-resource-name>
-        <description>only librarian handles routes</description>
-        <url-pattern>/LibrarianChecker</url-pattern>
-        <url-pattern>/LibBookInsert</url-pattern>
-        <url-pattern>/AddReader</url-pattern>
-        <url-pattern>/LendingData</url-pattern>
-        <url-pattern>/LibrarianLogin</url-pattern>
-        <url-pattern>/LibraryBook</url-pattern>
-        <url-pattern>/FilterBooks</url-pattern>
-        <url-pattern>/RemoveBooks</url-pattern>
-        <url-pattern>/LibrarianLendBook</url-pattern>
-      </web-resource-collection>
-      <auth-constraint>
-        <description/>
-        <role-name>librarian</role-name>
-      </auth-constraint>
-  </security-constraint> -->
-        <!-- <http-method>OPTIONS</http-method> -->
+
+
+
+  
+
+
+
+
+
+  
+
+
+<!--Defines Security Constraint -->  
 <security-constraint>
   <display-name>JSP Demo Constraints</display-name>
   <web-resource-collection>
@@ -514,6 +366,7 @@
   <role-name>*</role-name>
   </auth-constraint>
 </security-constraint>
+
 <!--Defines Login Config -->
     <login-config>
         <auth-method>FORM</auth-method>
@@ -524,17 +377,6 @@
             <form-error-page>/MakeError</form-error-page>
         </form-login-config>
     </login-config>
-
-
-<!--Defines Security Role -->
-    <!-- <security-role>
-        <description/>
-        <role-name>admin</role-name>
-    </security-role>
-    <security-role>
-        <description/>
-        <role-name>librarian</role-name>
-    </security-role> -->
 
 <!-- session time out -->
 <session-config> <session-timeout>100</session-timeout> </session-config>
@@ -581,5 +423,6 @@
   <filter-name>f1</filter-name>  
   <url-pattern>/*</url-pattern>  
 </filter-mapping>  
+
 
 </web-app>

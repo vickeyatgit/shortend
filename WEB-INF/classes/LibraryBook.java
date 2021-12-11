@@ -7,24 +7,20 @@ import java.io.PrintWriter;
 import dbaction.Dbclass;
 import org.json.*;
 import java.io.IOException;
-import dbaction.TokenCheck;
-
 
 public class LibraryBook extends HttpServlet {
     
     Dbclass db = new Dbclass();
-    TokenCheck ck = new TokenCheck();
+    // get list of books
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        //get books
         JSONArray ja = new JSONArray();
-        System.out.println("clicked innnnn");
+        String names = request.getRemoteUser();
+        int businessId = db.getBusinessId(names);
         PrintWriter out = response.getWriter();
-        ja = db.librarianBook();
-        System.out.println(ja);
+        ja = db.librarianBook(businessId);
         out.println(ja);
-
-
+        out.close();
     }
 }

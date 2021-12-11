@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import dbaction.Dbclass;
 import java.io.PrintWriter;
-import dbaction.TokenCheck;
 
 
 public class LendingData extends HttpServlet {
 
+    // get list of readers has books 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Dbclass db = new Dbclass();
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -18,17 +18,11 @@ public class LendingData extends HttpServlet {
         JSONArray hi = new JSONArray();
         System.out.println("getting in");
         System.out.println("try");
-        hi = db.readersData();
+        String names = request.getRemoteUser();
+        int businessId = db.getBusinessId(names);
+        hi = db.readersData(businessId);
         out.println(hi);
         out.flush();
     }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-                PrintWriter out = response.getWriter();
-                out.println("finished");
-                out.flush();
-
-            }
 
 }

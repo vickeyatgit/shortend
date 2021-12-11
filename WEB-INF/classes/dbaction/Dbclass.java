@@ -36,18 +36,20 @@ public class Dbclass {
     //admin login
     public Boolean login(String user, String pass) {
         Boolean res = false;
-        Connection con = getConnection();
         String sql = "SELECT * FROM admin WHERE username = '" + user + "'AND password = '" + pass + "'";
         try {
+            Connection con = getConnection();
             Statement stat = con.createStatement();
             ResultSet r = stat.executeQuery(sql);
             while (r.next()) {
                 res = true;
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             res = false;
         }
+        
         return res;
     }
 
@@ -70,15 +72,16 @@ public class Dbclass {
                 temp.add(result.getString("bookstally"));
                 graph.add(temp);
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return graph;
     }
+
     //list of librarian for admin
     public ArrayList<ArrayList<String>> librarianGetList() {
         ArrayList<ArrayList<String>> graph = new ArrayList<>();
-        // ArrayList<Librarianlist> libList = new ArrayList<Librarianlist>();
         try {
             Connection con = getConnection();
             String sql = " SELECT * FROM librarian ;";
@@ -104,6 +107,7 @@ public class Dbclass {
                 temp.add(result.getString("bookstally"));
                 graph.add(temp);
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,9 +117,9 @@ public class Dbclass {
     //add Admin
     public Boolean createAdmin(String user, String pass) {
         Boolean res = false;
-        Connection con = getConnection();
         String query = "INSERT INTO admin (username,password) VALUES (?,?)";
         try {
+            Connection con = getConnection();
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, user);
             ps.setString(2, pass);
@@ -123,9 +127,11 @@ public class Dbclass {
             if (countInserted == 1) {
                 res = true;
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
         return res;
     }
 
@@ -134,8 +140,8 @@ public class Dbclass {
             String mobile) {
         Boolean res = false;
         String query = "INSERT INTO librarian (username,password,firstname,lastname,mobilenumner,emailid,bookstally) VALUES (?,?,?,?,?,?,?);";
-        Connection con = getConnection();
         try {
+            Connection con = getConnection();
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, username);
             ps.setString(2, password);
@@ -148,6 +154,7 @@ public class Dbclass {
             if (countInserted == 1) {
                 res = true;
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -158,18 +165,18 @@ public class Dbclass {
     public Boolean deleteLib(String user) {
         boolean res = false;
         String query = "Delete From librarian WHERE  username = '" + user + "'";
-        Connection con = getConnection();
         try {
+            Connection con = getConnection();
             Statement state = con.createStatement();
             int result = state.executeUpdate(query);
             if (result == 1) {
                 System.out.println("Successfully Deleted");
                 res = true;
             }
-
+            con.close();
             state.close();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return res;
     }
@@ -188,17 +195,7 @@ public class Dbclass {
                 check = true;
             }
             System.out.println("in DB module " + check);
-            // if (r.next() == false) {
-            //     return geek;
-            // }
-            // do {
-            //     geek.put("username", r.getString("username"));
-            //     geek.put("firstname", r.getString("firstname"));
-            //     geek.put("lastname", r.getString("lastname"));
-            //     geek.put("mobilenumner", r.getString("mobilenumner"));
-            //     geek.put("emailid", r.getString("emailid"));
-            //     geek.put("bookstally", r.getString("bookstally"));
-            // } while (r.next());
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             check = false;
@@ -225,6 +222,7 @@ public class Dbclass {
                 geek.put("emailid", r.getString("emailid"));
                 geek.put("bookstally", r.getString("bookstally"));
             } while (r.next());
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -235,9 +233,9 @@ public class Dbclass {
     public Boolean addBook(
             String title, String subtitle, String[] author, String category,
             String language, String publish, String edition, 
-            String tot,String[] genre
+            String tot,String[] genre,int businessId
     ) {
-        String ss = "SELECT bookunify FROM bookrack WHERE title=? AND subtitle=? AND author=? AND language=? AND category=? AND publish=? AND genre=? AND edition=? ";
+        String ss = "SELECT bookunify FROM bookrack WHERE title=? AND subtitle=? AND author=? AND language=? AND category=? AND publish=? AND genre=? AND edition=? AND businessid=? ;";
         int total = Integer.parseInt(tot);
         int BookunifyNumber;
         Boolean completePath = false;
@@ -253,6 +251,7 @@ public class Dbclass {
             ps1.setDate(6, java.sql.Date.valueOf(publish));
             ps1.setArray(7, con.createArrayOf("TEXT", genre));
             ps1.setString(8, edition);
+            ps1.setInt(9,businessId);
             System.out.println("getting result");
             ResultSet r = ps1.executeQuery();
             System.out.println("finish result");
@@ -260,7 +259,7 @@ public class Dbclass {
                 //insert new 
                 System.out.println("not exist");
                 //insert
-                String sql = "INSERT INTO bookrack (title,subtitle,author,category,publish,genre,edition,language,intake,available) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING bookunify";
+                String sql = "INSERT INTO bookrack (title,subtitle,author,category,publish,genre,edition,language,intake,available,businessid) VALUES (?,?,?,?,?,?,?,?,?,?,?) RETURNING bookunify";
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setString(1, title);
                 ps.setString(2, subtitle);
@@ -274,12 +273,14 @@ public class Dbclass {
                 ps.setString(8, language);
                 ps.setDate(9, java.sql.Date.valueOf(java.time.LocalDate.now()));
                 ps.setBoolean(10, true);
+                ps.setInt(11,businessId);
                 ResultSet rs = ps.executeQuery();
                 total--;
                 int BookNO;
                 System.out.println("finished query");
                 if (rs.next() == false) {
                     System.out.println("enter to false session ");
+                    con.close();
                     return false;
                 } 
                 do{
@@ -297,7 +298,10 @@ public class Dbclass {
                 System.out.println("finished"+count);
                 if (count > 0)
                 completePath = true;
-                else return false;
+                else {
+                    con.close();
+                    return false;
+                }
             } else {
                 System.out.println("true exist");
                 int BookNO;
@@ -314,10 +318,13 @@ public class Dbclass {
                 if (count > 0)
                     completePath = true;
                 else
-                    return false;
+                    {
+                        con.close();
+                        return false;
+                    }
             }
             if(completePath){
-                String sql = "INSERT INTO bookrack (title,subtitle,author,category,publish,genre,edition,language,intake,available,bookunify) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO bookrack (title,subtitle,author,category,publish,genre,edition,language,intake,available,bookunify,businessid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setString(1, title);
                 ps.setString(2, subtitle);
@@ -332,14 +339,18 @@ public class Dbclass {
                 ps.setDate(9, java.sql.Date.valueOf(java.time.LocalDate.now()));
                 ps.setBoolean(10, true);
                 ps.setInt(11, BookunifyNumber);
-                
+                ps.setInt(12, businessId);
                 for (int i = 0; i < total; i++) {
                     int countInserted = ps.executeUpdate();
-                    if (countInserted == 0)
+                    if (countInserted == 0){
+                        con.close();
                         return false;
+                    }
                 }
+                con.close();
                 return true;
             } else {
+                con.close();
                 return false;
             }
             
@@ -351,18 +362,16 @@ public class Dbclass {
     }
 
     //list of books
-    public JSONArray librarianBook() {
+    public JSONArray librarianBook(int businessId) {
 
         ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
-
-        // String bookUnify = "SELECT * FROM bookunify;";
         JSONArray ja = new JSONArray();
         // JSONObject bookunify = new JSONObject();
         Dictionary bookunify = new Hashtable();
         try {
             Connection con = getConnection();
 
-            String bookRack = "SELECT * FROM bookrack";
+            String bookRack = "SELECT * FROM bookrack WHERE businessid='"+businessId+"';";
             String bookUnify = "SELECT * FROM bookunify;";
             Statement state = con.createStatement();
             //get book unify
@@ -392,6 +401,7 @@ public class Dbclass {
             result.close();
             System.out.println("finished dbclass");
             System.out.println(ja);
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -400,9 +410,9 @@ public class Dbclass {
     
 
     //check reader availability
-    public Boolean ReadersCheck(String userName) {
+    public Boolean ReadersCheck(String userName,int businessId) {
         Boolean check = false;
-        String sql = "SELECT * FROM reader where username='" + userName + "'";
+        String sql = "SELECT * FROM reader where username='" + userName + "' AND businessid='"+businessId+"' ";
         try {
             Connection con = getConnection();
             Statement stat = con.createStatement();
@@ -410,6 +420,7 @@ public class Dbclass {
             if (r.next() == false) {
                 check = true;
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -417,19 +428,20 @@ public class Dbclass {
     }
 
     //add reader
-    public Boolean addReader(String username,String name) {
+    public Boolean addReader(String username,String name,int businessId) {
         Boolean check = false;
-        String sql = "INSERT INTO reader (username,name) VALUES('"+username+"','"+name+"')";
+        String sql = "INSERT INTO reader (username,name,businessid) VALUES('"+username+"','"+name+"','"+businessId+"')";
         try {
-            Boolean userCheck = ReadersCheck(username);
-            if (userCheck) {
+            // Boolean userCheck = ReadersCheck(username);
+            // if (userCheck) {
                 Connection con = getConnection();
                 Statement stat = con.createStatement();
                 int addCount = stat.executeUpdate(sql);
                 if (addCount > 0) {
                     check = true;
                 }
-            }
+                con.close();
+            // }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -437,21 +449,24 @@ public class Dbclass {
     }
 
     //delete books
-    public String RemoveBooks(String bookId, String bookCount) {
+    public String RemoveBooks(String bookId, String bookCount,int businessId) {
         String check = "Try Again SomeTime";
         try {
             Connection con = getConnection();
             Statement state = con.createStatement();
             //1.check number of book
-            String sql1 = "SELECT * FROM bookunify Where bookId='" + bookId + "'";
+            String sql1 = "SELECT * FROM bookunify Where bookId='" + bookId + "';";
             ResultSet result = state.executeQuery(sql1);
             if (result.next() == false)
-                return "Book Could not Found";
+                {
+                    con.close();
+                    return "Book Could not Found";
+                }
             int getBookId = result.getInt("bookid");
             int getBookCount = result.getInt("bookaddup");
             if(Integer.parseInt(bookCount) > getBookCount)  return "Please Check Book Available Count";
             //2.get id
-            String sql2 = "SELECT id FROM bookrack WHERE available=true AND bookunify='"+bookId+"' LIMIT '" + bookCount + "';";
+            String sql2 = "SELECT id FROM bookrack WHERE available=true AND bookunify='"+bookId+"' AND businessid='"+ businessId +"' LIMIT '" + bookCount + "';";
             System.out.println(sql2);
             result = state.executeQuery(sql2);
             ArrayList<Integer> rackBookId = new ArrayList<Integer>();
@@ -466,7 +481,7 @@ public class Dbclass {
                     temp += "?,";
                 }
                 sql3 += temp.substring(0, temp.length() - 1);
-                sql3 += ");";
+                sql3 += ") AND businessid='"+ businessId +"';";
                 System.out.println(sql3);
                 PreparedStatement ps = con.prepareStatement(sql3);
                 for (int i = 0; i < Integer.parseInt(bookCount); i++) {
@@ -479,11 +494,14 @@ public class Dbclass {
                 String sql4 = "UPDATE bookunify SET bookaddup = bookaddup -'"+bookCount+"' WHERE bookid='" + bookId + "' ;";
                 int count = state.executeUpdate(sql4);
                 if (count > 0) {
+                    con.close();
                     return "Successfully Removed From Library Rack";
                 } else {
+                    con.close();
                     return "failed to update in Some AREA";
                 }
             }else{
+                con.close();
                 return "No enough Books Available, May Some be Borrowed";
             }
         } catch (Exception e) {
@@ -493,10 +511,10 @@ public class Dbclass {
     }
 
     //give book to reader
-    public String lendBook(String bookId, String username) {
+    public String lendBook(String bookId, String username,int businessId) {
         String check = "Try Again SomeTime";
         try {
-            String sql1 = "SELECT * FROM bookrack WHERE bookunify='" + bookId + "' AND available= true LIMIT 1;";
+            String sql1 = "SELECT * FROM bookrack WHERE bookunify='" + bookId + "' AND businessid='"+ businessId +"' AND available= true LIMIT 1;";
             Connection con = getConnection();
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery(sql1);
@@ -505,23 +523,25 @@ public class Dbclass {
                 return "book is not Available";
             int lendBookId = result.getInt("id");
             //get reader id
-            String sql2 = "SELECT id FROM READER WHERE username='" + username + "'";
+            String sql2 = "SELECT id FROM READER WHERE username='" + username + "' AND businessid='"+ businessId +"';";
             result = state.executeQuery(sql2);
             if (result.next() == false)
                 return check;
             int readerId = result.getInt("id");
             //insert query
-            String sql3 = "INSERT INTO booklend (readerid,Bookid) VALUES(?,?);";
+            String sql3 = "INSERT INTO booklend (readerid,Bookid,businessid) VALUES(?,?,?);";
             PreparedStatement ps = con.prepareStatement(sql3);
             ps.setInt(1, readerId);
             ps.setInt(2, lendBookId);
+            ps.setInt(3,businessId);
             int booksCount = ps.executeUpdate();
             if (booksCount > 0) {
-                String sql4 = "UPDATE bookrack SET available = false WHERE id = '" + lendBookId + "'";
+                String sql4 = "UPDATE bookrack SET available = false WHERE id = '" + lendBookId + "' AND businessid = '"+businessId+"';";
                 int up = state.executeUpdate(sql4);
                 if (up > 0)
                     check = "Successfully book is borrowed";
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -529,7 +549,7 @@ public class Dbclass {
     }
 
     //filter books
-    public JSONArray filterBooks(String title,String lang,String auth,String cat ,String avail) {
+    public JSONArray filterBooks(String title,String lang,String auth,String cat ,String avail,int businessId) {
         ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
         JSONArray ja = new JSONArray();
         Dictionary bookunify = new Hashtable();
@@ -537,33 +557,25 @@ public class Dbclass {
             Connection con = getConnection();
 
             Boolean andCheck= false;
-            String bookRack = "SELECT * FROM bookrack WHERE ";
+            String bookRack = "SELECT * FROM bookrack WHERE businessid='"+businessId+"' ";
             if (title.length() > 0) {
-                bookRack += "LOWER(title) LIKE '%" + title + "%'";
+                bookRack += "AND LOWER(title) LIKE '%" + title + "%'";
                 andCheck = true;
             }
             if (lang.length() > 0) {
-                if (andCheck)
-                    bookRack += " AND ";
-                bookRack += "LOWER(language) like '%" + lang + "%'";
+                bookRack += "AND LOWER(language) like '%" + lang + "%'";
                 andCheck = true;
             }
             if (avail.length() > 0) {
-                if (andCheck)
-                    bookRack += " AND ";
-                bookRack += "available='" + avail + "'";
+                bookRack += "AND available='" + avail + "'";
                 andCheck = true;
             }
             if (cat.length() > 0) {
-                if (andCheck)
-                    bookRack += " AND ";
-                bookRack += "LOWER(category) like '%" + cat + "%'";
+                bookRack += "AND LOWER(category) like '%" + cat + "%'";
                 andCheck = true;
             }
             if (auth.length() > 0) {
-                if (andCheck)
-                    bookRack += " AND ";
-                bookRack += "array_to_string(author,',') like '%" + auth + "%'";
+                bookRack += "AND array_to_string(author,',') like '%" + auth + "%'";
             }
             System.out.println(bookRack);
             //after remove commends
@@ -596,7 +608,7 @@ public class Dbclass {
             result.close();
             System.out.println("finished dbclass");
             System.out.println(ja);
-
+            con.close();
             //end here
         } catch (Exception e) {
             e.printStackTrace();
@@ -605,11 +617,11 @@ public class Dbclass {
     }
 
     //readers lend books
-    public JSONArray readersData() {
+    public JSONArray readersData(int businessId) {
         JSONArray ja = new JSONArray();
         try {
             Connection con = getConnection();
-            String bookLend = "SELECT * FROM booklend";
+            String bookLend = "SELECT * FROM booklend WHERE businessid = '"+businessId+"';";
             Statement state = con.createStatement();
             ArrayList<Integer> readersId = new ArrayList<>();
             ArrayList<Integer> bookId = new ArrayList<>();
@@ -632,7 +644,7 @@ public class Dbclass {
             for (Integer temp : bookId) {
                 ids += String.valueOf(temp) + ",";
             }
-            bookData += ids.substring(0, ids.length() - 1) + ");";
+            bookData += ids.substring(0, ids.length() - 1) + ") AND businessid = '"+businessId+"';";
             Dictionary bookDetails = new Hashtable();
             result = state.executeQuery(bookData);
             while (result.next()) {
@@ -645,7 +657,7 @@ public class Dbclass {
             for (Integer temp : readersId) {
                 ids += String.valueOf(temp) + ",";
             }
-            readersData += ids.substring(0, ids.length() - 1) + ");";
+            readersData += ids.substring(0, ids.length() - 1) + ") AND businessid = '"+businessId+"' ;";
             Dictionary readersDetails = new Hashtable();
             result = state.executeQuery(readersData);
             while (result.next()) {
@@ -669,7 +681,7 @@ public class Dbclass {
                 jo.put("bookname", bookDetails.get(lendingDate.get(j).get(1)));
                 ja.put(jo);
             }
-
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -692,7 +704,7 @@ public class Dbclass {
             if (rs.next() != false) {
                 res += String.valueOf(rs.getInt("count"));
             }
-    
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -703,7 +715,7 @@ public class Dbclass {
     public Boolean mail(String from,String to,String sub,String body,String time,String attachment,String type,int minutes,String date){
         Boolean check = false;
         String query = "INSERT INTO mails (mailfrom,mailto,subject,body,attachment,type,intervalminutes,ondate) VALUES (?,?,?,?,?,?,?,?);";
-        Connection con = getConnection();
+        // Connection con = getConnection();
         
         // public static final Calendar tzUTC = Calendar.getInstance(TimeZone.getTimeZone("UTC"));  
         // LocalDate localDate = LocalDate.now();
@@ -748,6 +760,7 @@ public class Dbclass {
                 check = true;
             }
             System.out.println(check);
+            con.close();
         }catch (Exception e) {
             e.printStackTrace();
             check=false;
@@ -768,6 +781,7 @@ public class Dbclass {
             }
             System.out.println("carry => "+carry);
             Boolean sessionRemover = removeUserFromSession();
+            con.close();
         }catch (Exception e) {
             e.printStackTrace();
             
@@ -787,6 +801,7 @@ public class Dbclass {
 
             int affectedrows = pstmt.executeUpdate();
             if(affectedrows>0) suc=true;
+            con.close();
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -849,6 +864,7 @@ public class Dbclass {
                 carry = result.getString("username");
             }
             System.out.println("carry => "+carry);
+            con.close();
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -867,6 +883,7 @@ public class Dbclass {
                 carry = result.getString("password");
             }
             System.out.println("carry => "+carry);
+            con.close();
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -884,6 +901,7 @@ public class Dbclass {
 
             int affectedrows = pstmt.executeUpdate();
             if(affectedrows>0) suc=true;
+            con.close();
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -925,33 +943,16 @@ public class Dbclass {
             while (result.next()) {
                 list.add(result.getString("rolename"));
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
         }
+        System.out.println("list => ");
+        for(String s : list){
+            System.out.println(s);
+        } System.out.println("list => => => => => => => => => => => =>");
         return list;
-        // String[] carry = new String[2];
-        // System.out.println("in dbaction");
-        // ArrayList list=new ArrayList();
-        // // Array temp;
-        // String query = "SELECT * FROM account WHERE email='"+username+"' AND password='"+password+"';";
-        // try {  
-        //     Connection con = getConnection();
-        //     Statement state = con.createStatement();
-        //     ResultSet result = state.executeQuery(query);
-        //     while (result.next()) {
-        //         System.out.println("catch");
-        //         Array cities = result.getArray("role");
-        //         String[] str_cities = (String[])cities.getArray();
-        //         for (String str : str_cities) 
-        //             list.add(str);
-        //     }
-        //     System.out.println("no user");
-        // }catch (Exception e) {
-        //     e.printStackTrace();
-        //     System.out.println("error"+ e);
-        // }
-        // return list;
     }
 
     //create new user
@@ -967,6 +968,7 @@ public class Dbclass {
             pstmt.setString(4, phone);
             int affectedrows = pstmt.executeUpdate();
             if(affectedrows>0) suc=true;
+            con.close();
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -990,6 +992,7 @@ public class Dbclass {
                 ja.put(jo);
                 
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1017,6 +1020,7 @@ public class Dbclass {
                 jo.put("resources", list);
                 ja.put(jo);
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1037,6 +1041,7 @@ public class Dbclass {
             if(affectedrows1 > 0) {
                 check=true;
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1054,6 +1059,7 @@ public class Dbclass {
             pstmt.setArray(2, con.createArrayOf("TEXT", resource));
             int affectedrows = pstmt.executeUpdate();
             if(affectedrows>0) check=true;
+            con.close();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -1075,6 +1081,7 @@ public class Dbclass {
                 jo.put("name", result.getString("fullname"));
                 jo.put("mobile", result.getString("mobilenumber"));
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1083,14 +1090,33 @@ public class Dbclass {
 
     //uncomment after testing
     //delete user data
-    public boolean deleteAccount(String email){
+    public boolean deleteAccount(String email,int businessId){
         boolean check = false;
         try {
             Connection con = getConnection();
-            String query = "DELETE FROM account WHERE email = '"+email+"';";
+            // get user id
+            String query = "SELECT id FROM useraccount WHERE email = '"+email+"';";
             Statement state = con.createStatement();
-            int affectedrows = state.executeUpdate(query);
-            if(affectedrows>0) check=true;
+            ResultSet result = state.executeQuery(query);
+            if (result.next()) {
+                int id = result.getInt("id");
+                // check business branch
+                query = "SELECT businessid FROM org_user WHERE '"+id+"' = ANY(useridlist);";
+                result = state.executeQuery(query);
+                if (result.next()) {
+                    int businessid = result.getInt("businessid");
+                    if (businessid == businessId) {
+                        // delete user
+                        query = "DELETE FROM useraccount WHERE id = "+id+";";
+                        int affectedrows = state.executeUpdate(query);
+                        if (affectedrows > 0) {
+                            check = true;
+                        }
+                        System.out.println("delete user");
+                    }
+                }
+            }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1120,6 +1146,7 @@ public class Dbclass {
                 jo.put("role", list);
                 ja.put(jo);
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1148,6 +1175,7 @@ public class Dbclass {
                 jo.put("role", list);
                 ja.put(jo);
             }
+            con.close();
         // for (int i=0; i<ja.length(); i++) {
         //     JSONObject item = ja.getJSONObject(i);
         //     String name1 = item.getString("name");
@@ -1178,6 +1206,7 @@ public class Dbclass {
             while (result.next()) {
                 password = result.getString("password");
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1201,6 +1230,7 @@ public class Dbclass {
                     temp.add(str);
                 list.addAll(temp);
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1208,19 +1238,27 @@ public class Dbclass {
     }
 
     //create user
-    public Boolean createUser(String email, String name, String mobile, String password){
+    public Boolean createUser(String email, String name, String mobile, String password, String business){
         Boolean check = false;
         try {
             Connection con = getConnection();
-            String query = "INSERT INTO useraccount (email,password,fullname,mobilenumber) VALUES (?,?,?,?);";
+            String query = "INSERT INTO useraccount (email,password,fullname,mobilenumber) VALUES (?,?,?,?) RETURNING id;";
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.setString(1, email);
             pstmt.setString(2, password);
             pstmt.setString(3, name);
             pstmt.setString(4, mobile);
-            int affectedrows = pstmt.executeUpdate();
-            if(affectedrows>0) check=true;
+            ResultSet result = pstmt.executeQuery();
+            while (result.next()) {
+                int id = result.getInt("id");
+                System.out.println("id: " + id);
+                query = "UPDATE org_user SET useridlist = array_append(useridlist,'"+id+"') WHERE businessid = (SELECT id FROM orglist WHERE businessname = '"+business+"')";
+                Statement state = con.createStatement();
+                int affectedrows = state.executeUpdate(query);
+                if(affectedrows>0) check=true;
+            }
             System.out.println("new user created: ");
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1228,15 +1266,16 @@ public class Dbclass {
     }
 
     // create role and resource
-    public Boolean createRole(String role, String[] res){
+    public Boolean createRole(String role, String[] res,int businessId){
         Boolean check = false;
-        String query = "INSERT INTO role (rolename) VALUES (?) RETURNING id;";
+        String query = "INSERT INTO role (rolename,businessid) VALUES (?,?) RETURNING id;";
         int roleid = 0;
         int resourceid = 0;
         try {
             Connection con = getConnection();
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.setString(1, role);
+            pstmt.setInt(2, businessId);
             ResultSet result = pstmt.executeQuery();
             while (result.next()) {
                 roleid = result.getInt("id");
@@ -1258,6 +1297,7 @@ public class Dbclass {
                     if(affectedrows>0) check=true;
                 }
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1265,10 +1305,10 @@ public class Dbclass {
     }
 
     // get role and resource combine
-    public JSONArray roleResourseCombine() {
+    public JSONArray roleResourseCombine(int id) {
         System.out.println("enter role");
         JSONArray ja = new JSONArray();
-        String query1 = "SELECT role.rolename,resources.res FROM role,resources,role_resource WHERE role_resource.roleid=role.id AND role_resource.resourceid=resources.id;";
+        String query1 = "SELECT role.rolename,resources.res FROM role,resources,role_resource WHERE role_resource.roleid=role.id AND role_resource.resourceid=resources.id AND role.businessid='"+id+"' ;";
         try {
             Connection con = getConnection();
             Statement state = con.createStatement();
@@ -1284,21 +1324,28 @@ public class Dbclass {
                 jo.put("resources", list);
                 ja.put(jo);
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return ja;
     }
 
-    //get new unrole
-    public JSONArray newlistOfUnRole(){
+    //get new unrole user list
+    public JSONArray newlistOfUnRole(int businessId){
         JSONArray ja = new JSONArray();
-        String query = "SELECT * FROM useraccount u LEFT OUTER JOIN user_role r ON r.userid = u.id;";
+        // String query = "SELECT * FROM useraccount u LEFT OUTER JOIN user_role r ON r.userid = u.id;";
+        String query = "SELECT useridlist FROM org_user WHERE businessid = '"+businessId+"';";
         try {
             Connection con = getConnection();
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery(query);
-            //
+            Array useridlist = null;
+            while(result.next()){
+                useridlist = result.getArray("useridlist");
+            }
+            query = "SELECT * FROM useraccount u LEFT OUTER JOIN user_role r ON r.userid = u.id WHERE u.id = ANY('"+useridlist+"');";
+            result = state.executeQuery(query);
             while (result.next()) {
                 int userid = result.getInt("userid");
                 if(userid == 0) {
@@ -1309,7 +1356,7 @@ public class Dbclass {
                     ja.put(jo);
                 }
             }
-            
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
@@ -1317,12 +1364,12 @@ public class Dbclass {
         return ja;
     }
 
-    // set new role
-    public Boolean setNewRole(String user,String[] role){
+    // set new role and resource
+    public Boolean setNewRole(String user,String[] role,int businessId){
         Boolean check = false;
         // String query1 = "SELECT id FROM useraccount WHERE email = '"+user+"';";
         // String query2 = "SELECT id FROM role WHERE rolename = '"+role[0]+"';";
-        String query = "INSERT INTO user_role (userid,roleid) VALUES ((SELECT id FROM useraccount WHERE email = '"+user+"'),(SELECT id FROM role WHERE rolename = '"+role[0]+"'));";
+        String query = "INSERT INTO user_role (userid,roleid) VALUES ((SELECT id FROM useraccount WHERE email = '"+user+"'),(SELECT id FROM role WHERE rolename = '"+role[0]+"' AND businessid='"+businessId+"'));";
         int userid = 0;
         int roleid = 0;
         try {
@@ -1330,6 +1377,7 @@ public class Dbclass {
             PreparedStatement pstmt = con.prepareStatement(query);
             int affectedrows = pstmt.executeUpdate();
             if(affectedrows>0) check=true;
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1337,21 +1385,25 @@ public class Dbclass {
     }
 
     //get new user 
-    public JSONArray newlistOfUser(){
+    public JSONArray newlistOfUser(int businessId,String username){
         JSONArray ja = new JSONArray();
-        String query = "SELECT * FROM user_role,useraccount,role WHERE user_role.userid = useraccount.id AND user_role.roleid = role.id;";
+        String query = "SELECT * FROM user_role,useraccount,role WHERE user_role.userid = useraccount.id AND user_role.roleid = role.id AND role.businessid = '"+businessId+"';";
         try {
             Connection con = getConnection();
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery(query);
             while (result.next()) {
                 JSONObject jo = new JSONObject();
-                jo.put("email", result.getString("email"));
-                jo.put("name", result.getString("fullname"));
-                jo.put("mobile", result.getString("mobilenumber"));
-                jo.put("role", result.getString("rolename"));
-                ja.put(jo);
+                if (!(result.getString("email").equals(username))){
+                    jo.put("email", result.getString("email"));
+                    jo.put("name", result.getString("fullname"));
+                    jo.put("mobile", result.getString("mobilenumber"));
+                    jo.put("role", result.getString("rolename"));
+                    ja.put(jo);
+                }
+
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
@@ -1360,21 +1412,24 @@ public class Dbclass {
     }
 
     //get new user via filter
-    public JSONArray newlistOfUserFilter(String filter){
+    public JSONArray newlistOfUserFilter(String filter,int businessId,String username){
         JSONArray ja = new JSONArray();
-        String query = "SELECT * FROM user_role,useraccount,role WHERE user_role.userid = useraccount.id AND user_role.roleid = role.id AND useraccount.fullname LIKE '%"+filter+"%';";
+        String query = "SELECT * FROM user_role,useraccount,role WHERE user_role.userid = useraccount.id AND user_role.roleid = role.id AND useraccount.fullname LIKE '%"+filter+"%' AND role.businessid ='"+businessId+"';";
         try {
             Connection con = getConnection();
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery(query);
             while (result.next()) {
                 JSONObject jo = new JSONObject();
-                jo.put("email", result.getString("email"));
-                jo.put("name", result.getString("fullname"));
-                jo.put("mobile", result.getString("mobilenumber"));
-                jo.put("role", result.getString("rolename"));
-                ja.put(jo);
+                if (!(result.getString("email").equals(username))){
+                    jo.put("email", result.getString("email"));
+                    jo.put("name", result.getString("fullname"));
+                    jo.put("mobile", result.getString("mobilenumber"));
+                    jo.put("role", result.getString("rolename"));
+                    ja.put(jo);
+                }
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
@@ -1393,6 +1448,7 @@ public class Dbclass {
             while (result.next()) {
                 list.add(result.getString("rolename"));
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
@@ -1401,9 +1457,9 @@ public class Dbclass {
     }
 
     // get resource via role
-    public ArrayList<String> getResource(String role){
+    public ArrayList<String> getResource(String role,int businessId){
         ArrayList<String> list = new ArrayList<String>();
-        String query = "SELECT res FROM resources WHERE id=(SELECT resourceid FROM role_resource WHERE roleid=(SELECT id FROM role WHERE rolename='"+role+"'))";
+        String query = "SELECT res FROM resources WHERE id=(SELECT resourceid FROM role_resource WHERE roleid=(SELECT id FROM role WHERE rolename='"+role+"' AND businessid='"+businessId+"' )) ";
         try {
             Connection con = getConnection();
             Statement state = con.createStatement();
@@ -1414,6 +1470,7 @@ public class Dbclass {
                 for (String str : temp) 
                     list.add(str);
             }
+            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
@@ -1422,9 +1479,9 @@ public class Dbclass {
     }
 
     //get all role
-    public ArrayList<String> getAllRole(){
+    public ArrayList<String> getAllRole(int businessId){
         ArrayList<String> list = new ArrayList<String>();
-        String query = "SELECT * FROM role";
+        String query = "SELECT * FROM role WHERE businessid = '"+businessId+"';";
         try {
             Connection con = getConnection();
             Statement state = con.createStatement();
@@ -1432,11 +1489,165 @@ public class Dbclass {
             while (result.next()) {
                 list.add(result.getString("rolename"));
             }
+            con.close();
         }catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
         }
         return list;
+    }
+
+    // check business name exist
+    public Boolean getExtstingBusiness(String business){
+        Boolean check = true;
+        String query = "SELECT * FROM orglist WHERE businessname='"+business+"';";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                check = false;
+            }
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return check;
+    }
+
+    // check email exist
+    public Boolean checkEmail(String email){
+        Boolean check = true;
+        String query = "SELECT * FROM useraccount WHERE email='"+email+"';";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                check = false;
+            }
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return check;
+    }
+
+    // create owner
+    public Boolean createOwner(String name,String mobile,String user,String pass,String url){
+
+        Boolean check = false;
+        String query = "INSERT INTO useraccount (email,password,fullname,mobilenumber) VALUES ('"+user+"','"+pass+"','"+name+"','"+mobile+"') RETURNING id;";
+        
+        int userId = 0;
+        int businessId = 0;
+        int preCheck = 0;
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                userId = result.getInt("id");
+            }
+            if(userId!=0){
+                // set business
+                query = "INSERT INTO orglist (businessname) VALUES ('"+url+"') RETURNING id;";
+                result = state.executeQuery(query);
+                while (result.next()) {
+                    businessId = result.getInt("id");
+                }
+                // get owner role id
+                query = "SELECT id FROM role WHERE rolename='owner';";
+                result = state.executeQuery(query);
+                int roleId = 0;
+                while (result.next()) {
+                    roleId = result.getInt("id");
+                }
+                // set role as owner
+                if(roleId!=0){
+                    query = "INSERT INTO user_role (userid,roleid) VALUES ('"+userId+"','"+roleId+"');";
+                    int userRole = state.executeUpdate(query);
+                }
+                
+            }
+            if(businessId!=0 && userId!=0){
+                // connect user and business
+                Integer[] id = {userId};
+                query = "INSERT INTO org_user (businessid,useridlist) VALUES (?,?);";
+                PreparedStatement preparedStmt = con.prepareStatement(query);
+                preparedStmt.setInt(1, businessId);
+                preparedStmt.setArray(2, con.createArrayOf("INTEGER", id));
+                int preCheck1 = preparedStmt.executeUpdate();
+                if(preCheck1 > 0){
+                    check = true;
+                }
+            }
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return check;
+    }
+
+    // get business id by user id
+    public int getBusinessId(String email){
+        int businessId = 0;
+        // String query = "SELECT businessid FROM org_user WHERE '(SELECT id FROM useraccount WHERE email='"+email+"')'=ANY(useridlist);";
+        String query = "SELECT id FROM useraccount WHERE email='"+email+"';";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            int userId = 0;
+            while (result.next()) {
+                userId = result.getInt("id");
+                System.out.println("user id - "+userId);
+                query = "SELECT businessid FROM org_user WHERE '"+userId+"'=ANY(useridlist);";
+                result = state.executeQuery(query);
+                while (result.next()) {
+                    System.out.println("business id - "+result.getInt("businessid"));
+                    businessId = result.getInt("businessid");
+                }
+            }
+            con.close();
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+        return businessId;
+    }
+
+    // get user details
+    public JSONObject getUserProfile(String email){
+        JSONObject obj = new JSONObject();
+        String query = "SELECT id,fullname,mobilenumber FROM useraccount WHERE email='"+email+"';";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while (result.next()) {
+                obj.put("id", result.getInt("id"));
+                obj.put("email", email);
+                obj.put("fullname", result.getString("fullname"));
+                obj.put("mobilenumber", result.getString("mobilenumber"));
+                query = "SELECT businessname FROM orglist WHERE id=(SELECT businessid FROM org_user WHERE '"+result.getInt("id")+"'=ANY(useridlist));";
+            }
+            result = state.executeQuery(query);
+            while (result.next()) {
+                obj.put("businessname", result.getString("businessname"));
+            }
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
+
+    // check business alive or not
+    public Boolean checkBusinessAlive(String business){
+        
     }
 
 

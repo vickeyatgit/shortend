@@ -1,5 +1,4 @@
-import dbaction.DbCreateOrg;
-import dbaction.TokenCheck;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -11,17 +10,18 @@ import javax.servlet.RequestDispatcher;
 import java.io.PrintWriter;
 import org.json.*; 
 import java.util.Arrays;
+import dbaction.Dbclass;
 
 public class CreateOrg extends HttpServlet {
 
+  // check if business name is already in use
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     response.setHeader("Access-Control-Allow-Credentials", "true");
     PrintWriter out = response.getWriter();
 
-    DbCreateOrg db = new DbCreateOrg();
+    Dbclass db = new Dbclass();
     String name = request.getParameter("name");
-    System.out.println("name: " + name);
     Boolean result = db.getExtstingBusiness(name);
     JSONObject jo = new JSONObject();
     try {
@@ -34,6 +34,7 @@ public class CreateOrg extends HttpServlet {
     out.close();
   }
 
+  // create user with owner of org and info of org
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setContentType("text/html");
@@ -41,7 +42,8 @@ public class CreateOrg extends HttpServlet {
     PrintWriter out = response.getWriter();
     
     String name = request.getParameter("name");
-    String org = request.getParameter("org");
+    // String org = request.getParameter("org");
+    String org = "";
     String mobile = request.getParameter("mobile");
     String user = request.getParameter("user");
     String pass = request.getParameter("pass");
@@ -53,8 +55,8 @@ public class CreateOrg extends HttpServlet {
     System.out.println("user: " + user);
     System.out.println("pass: " + pass);
     System.out.println("url: " + url);
-    DbCreateOrg db = new DbCreateOrg();
-    Boolean result = db.CreateBase(name, org, mobile, user, pass, url);
+    Dbclass db = new Dbclass();
+    Boolean result = db.createOwner(name, mobile, user, pass, url);
 
     JSONObject jo = new JSONObject();
     try {

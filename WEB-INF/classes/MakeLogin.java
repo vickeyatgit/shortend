@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class MakeLogin extends HttpServlet {
 
+    // make login
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
     throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Credentials", "true");

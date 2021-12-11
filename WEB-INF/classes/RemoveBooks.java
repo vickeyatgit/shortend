@@ -13,6 +13,7 @@ public class RemoveBooks extends HttpServlet {
 
     Dbclass db = new Dbclass();
 
+    // remover book from rack
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -21,7 +22,8 @@ public class RemoveBooks extends HttpServlet {
         PrintWriter out = response.getWriter();
         String check = "Try Again SomeTime";
         try {
-            check = db.RemoveBooks(bookId, bookkCount);
+            int businessId = db.getBusinessId(request.getRemoteUser());
+            check = db.RemoveBooks(bookId, bookkCount,businessId);
         } catch (Exception e) {
             e.printStackTrace();
         }

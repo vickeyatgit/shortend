@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 
 
 public class Getsession extends HttpServlet{
+  // to get J_session_id from the request
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException 
     {

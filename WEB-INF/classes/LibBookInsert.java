@@ -8,17 +8,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import dbaction.Dbclass;
 import java.io.PrintWriter;
-import dbaction.TokenCheck;
 import org.json.*; 
 
 public class LibBookInsert extends HttpServlet {
 
     Dbclass db = new Dbclass();
-    TokenCheck ck = new TokenCheck();
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    }
 
+    // add books
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -36,7 +32,9 @@ public class LibBookInsert extends HttpServlet {
         String[] genre = tmp.split("[,]", 0);
         System.out.println("inn servlet");
         JSONObject resSent = new JSONObject();
-        Boolean get = db.addBook(title, subtitle, author, category, language, publish, edition, tot, genre);
+        String names = request.getRemoteUser();
+        int businessId = db.getBusinessId(names);
+        Boolean get = db.addBook(title, subtitle, author, category, language, publish, edition, tot, genre,businessId);
         System.out.print(get);
         if(get){
             try{
