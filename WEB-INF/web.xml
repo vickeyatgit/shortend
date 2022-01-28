@@ -6,7 +6,6 @@
     <welcome-file>login.jsp</welcome-file>
   </welcome-file-list>
 
-  <!-- class dir -->
   <servlet>
     <description>get role and resources</description>
     <display-name>GetRoleNav</display-name>
@@ -17,7 +16,7 @@
     <servlet-name>GetRoleNav</servlet-name>
     <url-pattern>/GetRoleNav</url-pattern>
   </servlet-mapping>
-
+  
   <servlet>
     <description>create readers details</description>
     <display-name>AddReader</display-name>
@@ -217,6 +216,7 @@
     <servlet-name>Getsession</servlet-name>
     <url-pattern>/Getsession</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <description></description>
     <display-name>LendingData</display-name>
@@ -239,6 +239,7 @@
     <url-pattern>/LibBookInsert</url-pattern>
   </servlet-mapping>
 
+
   <servlet>
     <description></description>
     <display-name>LibrarianLendBook</display-name>
@@ -260,28 +261,8 @@
     <servlet-name>LibraryBook</servlet-name>
     <url-pattern>/LibraryBook</url-pattern>
   </servlet-mapping>
-  
-  <servlet>
-    <description>respond error</description>
-    <display-name>MakeError</display-name>
-    <servlet-name>MakeError</servlet-name>
-    <servlet-class>MakeError</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>MakeError</servlet-name>
-    <url-pattern>/MakeError</url-pattern>
-  </servlet-mapping>
 
-  <servlet>
-    <description>response login</description>
-    <display-name>MakeLogin</display-name>
-    <servlet-name>MakeLogin</servlet-name>
-    <servlet-class>MakeLogin</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>MakeLogin</servlet-name>
-    <url-pattern>/MakeLogin</url-pattern>
-  </servlet-mapping>
+
 
   <servlet>
     <description></description>
@@ -326,7 +307,7 @@
     <servlet-name>AutoMail</servlet-name>
     <url-pattern>/AutoMail</url-pattern>
   </servlet-mapping>
-  
+
   <servlet>
     <description></description>
     <display-name>GetUserProfile</display-name>
@@ -338,7 +319,6 @@
     <url-pattern>/GetUserProfile</url-pattern>
   </servlet-mapping>
 
-<!-- not check -->
 
 
 
@@ -346,27 +326,47 @@
 
 
 
-  
 
 
 
 
 
-  
 
 
-<!--Defines Security Constraint -->  
-<security-constraint>
-  <display-name>JSP Demo Constraints</display-name>
-  <web-resource-collection>
-  <url-pattern>/Getsession</url-pattern>
-</web-resource-collection>
-<auth-constraint>
-  <description/>
-  <role-name>*</role-name>
-  </auth-constraint>
-</security-constraint>
 
+    <servlet>
+    <description>respond error</description>
+    <display-name>MakeError</display-name>
+    <servlet-name>MakeError</servlet-name>
+    <servlet-class>MakeError</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MakeError</servlet-name>
+    <url-pattern>/MakeError</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description>response login</description>
+    <display-name>MakeLogin</display-name>
+    <servlet-name>MakeLogin</servlet-name>
+    <servlet-class>MakeLogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MakeLogin</servlet-name>
+    <url-pattern>/MakeLogin</url-pattern>
+  </servlet-mapping>
+
+<!-- constraint -->
+  <security-constraint>
+    <display-name>JSP Demo Constraints</display-name>
+    <web-resource-collection>
+    <url-pattern>/Getsession</url-pattern>
+  </web-resource-collection>
+  <auth-constraint>
+    <description/>
+    <role-name>*</role-name>
+    </auth-constraint>
+  </security-constraint>
 <!--Defines Login Config -->
     <login-config>
         <auth-method>FORM</auth-method>
@@ -377,6 +377,7 @@
             <form-error-page>/MakeError</form-error-page>
         </form-login-config>
     </login-config>
+
 
 <!-- session time out -->
 <session-config> <session-timeout>100</session-timeout> </session-config>
@@ -415,14 +416,23 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 <!-- /cors -->
-<filter>
-  <filter-name>f1</filter-name>  
-  <filter-class>MyFilter</filter-class>  
-</filter>  
-<filter-mapping>  
-  <filter-name>f1</filter-name>  
-  <url-pattern>/*</url-pattern>  
-</filter-mapping>  
 
+
+  <!-- filter -->
+  <filter>
+    <filter-name>f1</filter-name>  
+    <filter-class>MyFilter</filter-class>  
+  </filter>  
+  <filter-mapping>  
+    <filter-name>f1</filter-name>  
+    <url-pattern>/*</url-pattern>  
+  </filter-mapping>  
+
+
+<!-- added -->
+
+<!-- <listener>
+  <listener-class>AutoSendMail</listener-class>
+</listener> -->
 
 </web-app>

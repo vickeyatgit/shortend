@@ -308,9 +308,11 @@ public class StoreMail extends HttpServlet {
                 PrintWriter out = response.getWriter();
                 JSONObject jo = new JSONObject(); //for send result
                 Boolean result = false;
-                String from = request.getRemoteUser();
+                // String from = request.getRemoteUser();// as of now use only for mywps010@gmail.com
+                String from = "mywps010@gmail.com";
                 System.out.println("from"+from);
-                String pass = db.getPassword(from);
+                // String pass = db.getPassword(from);// as of now use only password duplicate
+                String pass = "PointBreak";
                 String to = request.getParameter("to");
                 String subject = request.getParameter("subject");
                 String body = request.getParameter("body");

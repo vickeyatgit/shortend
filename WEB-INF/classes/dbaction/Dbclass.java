@@ -1092,6 +1092,7 @@ public class Dbclass {
     //delete user data
     public boolean deleteAccount(String email,int businessId){
         boolean check = false;
+        System.out.println("in delete");
         try {
             Connection con = getConnection();
             // get user id
@@ -1100,12 +1101,15 @@ public class Dbclass {
             ResultSet result = state.executeQuery(query);
             if (result.next()) {
                 int id = result.getInt("id");
+                System.out.println("id => "+id);
                 // check business branch
-                query = "SELECT businessid FROM org_user WHERE '"+id+"' = ANY(useridlist);";
+                query = "SELECT id FROM business_user WHERE '"+id+"' = ANY(userids) AND id = '"+businessId+"';";
                 result = state.executeQuery(query);
                 if (result.next()) {
-                    int businessid = result.getInt("businessid");
+                    int businessid = result.getInt("id");
+                    System.out.println("businessid get=> "+businessid);
                     if (businessid == businessId) {
+                        System.out.println("businessid => "+businessid);
                         // delete user
                         query = "DELETE FROM useraccount WHERE id = "+id+";";
                         int affectedrows = state.executeUpdate(query);
@@ -1252,9 +1256,10 @@ public class Dbclass {
             while (result.next()) {
                 int id = result.getInt("id");
                 System.out.println("id: " + id);
-                query = "UPDATE org_user SET useridlist = array_append(useridlist,'"+id+"') WHERE businessid = (SELECT id FROM orglist WHERE businessname = '"+business+"')";
+                query = "UPDATE business_user SET userids = array_append(userids,'"+id+"') WHERE businessname = '"+business+"';";
                 Statement state = con.createStatement();
                 int affectedrows = state.executeUpdate(query);
+                System.out.println("affected rows: " + affectedrows);
                 if(affectedrows>0) check=true;
             }
             System.out.println("new user created: ");
@@ -1335,14 +1340,14 @@ public class Dbclass {
     public JSONArray newlistOfUnRole(int businessId){
         JSONArray ja = new JSONArray();
         // String query = "SELECT * FROM useraccount u LEFT OUTER JOIN user_role r ON r.userid = u.id;";
-        String query = "SELECT useridlist FROM org_user WHERE businessid = '"+businessId+"';";
+        String query = "SELECT userids FROM business_user WHERE id = '"+businessId+"';";
         try {
             Connection con = getConnection();
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery(query);
             Array useridlist = null;
             while(result.next()){
-                useridlist = result.getArray("useridlist");
+                useridlist = result.getArray("userids");
             }
             query = "SELECT * FROM useraccount u LEFT OUTER JOIN user_role r ON r.userid = u.id WHERE u.id = ANY('"+useridlist+"');";
             result = state.executeQuery(query);
@@ -1500,7 +1505,7 @@ public class Dbclass {
     // check business name exist
     public Boolean getExtstingBusiness(String business){
         Boolean check = true;
-        String query = "SELECT * FROM orglist WHERE businessname='"+business+"';";
+        String query = "SELECT * FROM business_user WHERE businessname='"+business+"';";
         try {
             Connection con = getConnection();
             Statement state = con.createStatement();
@@ -1537,84 +1542,84 @@ public class Dbclass {
 
     // create owner
     public Boolean createOwner(String name,String mobile,String user,String pass,String url){
-
         Boolean check = false;
         String query = "INSERT INTO useraccount (email,password,fullname,mobilenumber) VALUES ('"+user+"','"+pass+"','"+name+"','"+mobile+"') RETURNING id;";
-        
         int userId = 0;
         int businessId = 0;
         int preCheck = 0;
+
         try {
-            Connection con = getConnection();
-            Statement state = con.createStatement();
-            ResultSet result = state.executeQuery(query);
+        Connection con = getConnection();
+        Statement state = con.createStatement();
+        // insert user and get id
+        ResultSet result = state.executeQuery(query);
+        while (result.next()) {
+            userId = result.getInt("id");
+        }
+        // insert business and get id
+        if(userId!=0){
+            query = "INSERT INTO business_user (businessname,userids) VALUES (?,?) RETURNING id;";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setString(1,url);
+            Integer[] id = {userId};
+            pstmt.setArray(2,con.createArrayOf("INTEGER",id));
+            result = pstmt.executeQuery();
             while (result.next()) {
-                userId = result.getInt("id");
+                businessId = result.getInt("id");
             }
-            if(userId!=0){
-                // set business
-                query = "INSERT INTO orglist (businessname) VALUES ('"+url+"') RETURNING id;";
-                result = state.executeQuery(query);
-                while (result.next()) {
-                    businessId = result.getInt("id");
-                }
-                // get owner role id
-                query = "SELECT id FROM role WHERE rolename='owner';";
-                result = state.executeQuery(query);
-                int roleId = 0;
-                while (result.next()) {
-                    roleId = result.getInt("id");
-                }
-                // set role as owner
-                if(roleId!=0){
-                    query = "INSERT INTO user_role (userid,roleid) VALUES ('"+userId+"','"+roleId+"');";
-                    int userRole = state.executeUpdate(query);
-                }
-                
+            pstmt.close();
+        }
+        // insert role to user
+        if(businessId!=0 && userId!=0){
+            // get owner role id
+            query = "SELECT id FROM role WHERE rolename = 'owner' AND businessid=0;";
+            result = state.executeQuery(query);
+            int roleId = -1;
+            while (result.next()) {
+            roleId = result.getInt("id");
             }
-            if(businessId!=0 && userId!=0){
-                // connect user and business
-                Integer[] id = {userId};
-                query = "INSERT INTO org_user (businessid,useridlist) VALUES (?,?);";
-                PreparedStatement preparedStmt = con.prepareStatement(query);
-                preparedStmt.setInt(1, businessId);
-                preparedStmt.setArray(2, con.createArrayOf("INTEGER", id));
-                int preCheck1 = preparedStmt.executeUpdate();
-                if(preCheck1 > 0){
+            // insert role to user
+            if(roleId!=-1){
+            query = "INSERT INTO user_role (userid,roleid) VALUES (?,?);";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setInt(1,userId);
+            pstmt.setInt(2,roleId);
+            int upt = pstmt.executeUpdate();
+                if(upt!=0){
                     check = true;
                 }
+            pstmt.close();
             }
-            con.close();
+        }
+        con.close();
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e);
+        e.printStackTrace();
         }
         return check;
     }
 
     // get business id by user id
     public int getBusinessId(String email){
-        int businessId = 0;
-        // String query = "SELECT businessid FROM org_user WHERE '(SELECT id FROM useraccount WHERE email='"+email+"')'=ANY(useridlist);";
+        int businessId = -1;
         String query = "SELECT id FROM useraccount WHERE email='"+email+"';";
         try {
-            Connection con = getConnection();
-            Statement state = con.createStatement();
-            ResultSet result = state.executeQuery(query);
-            int userId = 0;
-            while (result.next()) {
+                Connection con = getConnection();
+                Statement state = con.createStatement();
+                ResultSet result = state.executeQuery(query);
+                int userId = 0;
+                while (result.next()) {
                 userId = result.getInt("id");
                 System.out.println("user id - "+userId);
-                query = "SELECT businessid FROM org_user WHERE '"+userId+"'=ANY(useridlist);";
+                query = "SELECT id FROM business_user WHERE '"+userId+"'=ANY(userids);";
                 result = state.executeQuery(query);
                 while (result.next()) {
-                    System.out.println("business id - "+result.getInt("businessid"));
-                    businessId = result.getInt("businessid");
+                    System.out.println("business id - "+result.getInt("id"));
+                    businessId = result.getInt("id");
                 }
-            }
-            con.close();
+                }
+                con.close();    
         } catch (Exception e) {
-            //TODO: handle exception
+            e.printStackTrace();
         }
         return businessId;
     }
@@ -1627,16 +1632,20 @@ public class Dbclass {
             Connection con = getConnection();
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery(query);
+            int id = -1;
             while (result.next()) {
+                id = result.getInt("id");
                 obj.put("id", result.getInt("id"));
                 obj.put("email", email);
                 obj.put("fullname", result.getString("fullname"));
                 obj.put("mobilenumber", result.getString("mobilenumber"));
-                query = "SELECT businessname FROM orglist WHERE id=(SELECT businessid FROM org_user WHERE '"+result.getInt("id")+"'=ANY(useridlist));";
             }
-            result = state.executeQuery(query);
-            while (result.next()) {
-                obj.put("businessname", result.getString("businessname"));
+            if(id != -1){
+                query = "SELECT businessname FROM business_user WHERE '"+id+"'=ANY(userids);";
+                result = state.executeQuery(query);
+                while (result.next()) {
+                    obj.put("businessname", result.getString("businessname"));
+                }
             }
             con.close();
         } catch (Exception e) {
@@ -1645,9 +1654,25 @@ public class Dbclass {
         return obj;
     }
 
-    // check business alive or not
-    public Boolean checkBusinessAlive(String business){
-        
+    // get urllist
+    public Dictionary<String, String> getUrlList(){
+        Dictionary urlDetails = new Hashtable();
+
+        String query = "SELECT * FROM urllist;";
+        try {
+            Connection con = getConnection();
+            Statement state = con.createStatement();
+            ResultSet result = state.executeQuery(query);
+            while(result.next()){
+                urlDetails.put("name",result.getString("name"));
+                urlDetails.put("aliaes",result.getString("aliaes"));
+                urlDetails.put("app",result.getString("appbase"));
+            }
+        } catch (Exception e) {
+            //TODO: handle exception
+            e.printStackTrace();
+        }
+        return urlDetails;
     }
 
 
